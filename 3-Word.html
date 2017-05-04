@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <script>
+            
+            var challenges = ["apple", "gatech", "delta", "practice", "challenge" , "pncbank", "drop", "gmail", "chase", "microsoft", "bankofa", "stanford", "facebook", "google", "instagram", "sprint", "booking", "reddit", "linkedin", "bing"];
+            
+            
+            
+            var done_can_submit = false;
+            
+            
+            var key = "";
+            var challenge = "";
+            var count = 0;
+            var cResponse = "";
+            var vowels = "aeiou";
+            var wordWarning = false;
+            var stringWarning = false;
+            var wildcardWarning = false;
+            var flag1 = +1;
+            var flag2 = +1;
+            var webCounterVar = 0;
+            var newWebFlag = 1;
+            
+            
+            function gid(id) {
+                return document.getElementById(id);
+            }
+        function hint(el, text) {
+            el.innerText = text;
+        }
+        
+        function gname(name) {
+            return document.getElementsByName(name)[0];
+        }
+        
+        var timer;
+        function tick() {
+            timer = new Date();
+        }
+        
+        function tock() {
+            return (new Date() - timer);
+        }
+        
+        function I_eval_0() {
+            var guess2 = gname("I001").value.trim();
+            
+            if(guess2 == "GmailSam"){
+                
+                gid("I0_checkButton1").style.display='none';
+                gid("I0_nextButton1").style.display='block';
+                gname("I_hint001").style.color='black'
+                gname("I0_try").style.display='none'
+                gname("I0_correct").style.display = 'block'
+                
+            }else{
+                gname("I_hint001").style.color='red'
+                gname("I0_try").style.display='block'
+                gname("I_hint001").style.display='block'
+            }
+            return;
+        }
+        
+        function I_eval_3() {
+            var guess3 = gname("I300").value.trim();
+            
+            if(guess3 == "cblmtjmxrB7!"){
+                
+                gid("I_checkButton3").style.display='none';
+                gid("I_nextButton3").style.display='block';
+                //document.getElementsId("I_hint300").style.color='green'
+                //document.getElementById("I_hint300").style.display = 'block'
+                document.getElementById("p_hint300").style.color='black'
+                document.getElementById("p_hint300").style.display = 'block'
+                gname("I3_try").style.display='none'
+                gname("I3_correct").style.display = 'block'
+                document.getElementById("I_hint300").style.display='none'
+                document.getElementById("great").style.display='block'
+            }else{
+                
+                document.getElementById("p_hint300").style.display = 'block'
+                document.getElementById("p_hint300").style.color='red'
+                document.getElementById("p_hint300").style.display = 'block'
+                gname("I3_try").style.display='block'
+                document.getElementById("I_hint300").style.display='block'
+            }
+            return;
+        }
+        
+        setInterval(function () {
+                    var button = gid("submitButton");
+                    if (!button) return;
+                    button.style.display = done_can_submit ? "block" : "none";
+                    button.disabled = !done_can_submit;
+                    }, 100)
+   
+   
+                    var qnum = -1;
+                    var verified = true;
+                    var tries = 0
+                    function eval_click_password() {
+                        console.log("inside eval function")
+                        if (!verified) {
+                            var guess = gname("q" + qnum).value.trim();
+                            if (guess == "") return; // accidental button press without entering anything
+                            
+                            
+                            var gold = checkRespond(challenges[qnum], guess);
+                            
+                            gname("q"+qnum+"_"+tries).value = gold;
+                            
+                            var html;
+                            if (gold != undefined && tries > 1) {
+                                
+                                html = "<span class='wrong'>The correct answer would be <span class='pw'>" + gold + "</span>";
+                                gname("q" + qnum + "_correct").value = "0";
+                                
+                                webCounterVar = webCounterVar + 1;
+                                document.getElementById("webCounter").innerHTML = webCounterVar + "/20";
+                                
+                                gid("eval_button").innerHTML = "Next";
+                                gname('q' + qnum + "_time").value = tock();
+                                gname("q" + qnum).readOnly = true;
+                            
+                                
+                            } else {
+                                if( gold != undefined){
+                                    html = "<span class='wrong'>Try again!</span>";
+                                    tries=tries + 1
+                                    verified=!verified
+                                }else{
+                                    html = "<span class='correct'>CORRECT!</span>";
+                                    gid("3wordhint").style.display = "none";
+                                    
+                                    webCounterVar = webCounterVar + 1;
+                                    document.getElementById("webCounter").innerHTML = webCounterVar + "/20";
+                                    
+                                    
+                                    gname("q" + qnum + "_correct").value = "1";
+                                    
+                                    gid("eval_button").innerHTML = "Next";
+                                    gname("q" + qnum + "_time").value = tock();
+                                    gname("q" + qnum).readOnly = true;
+                                    
+                                }
+                            }
+                            gid("verify_div").innerHTML = html;
+                        } else {
+                            tries=0
+                            gid("lastTable").style.display="block";
+                            gid("eval_button").innerHTML = "Submit password";
+                            gid("verify_div").innerHTML = "";
+                            if (qnum == -1) {
+                                gid("fun_div").style.display = 'block';
+                            } else {
+                                gname("q" + qnum).style.display = "none";
+                            }
+                            qnum++;
+                            gid("3wordhint").style.display = "none";
+                            
+                            if (qnum >= challenges.length) {
+                                gid("feedback").style.display = "block";
+                                gid("fun_div").style.display = "none";
+                                gname("practice_final").value = tock();
+                                done_can_submit=true;
+                                tick(); // Start measuring the feedback time
+                                return;
+                                
+                            } else {
+                                gname("q" + qnum).style.display = "block";
+                                gid("website_name").innerHTML = challenges[qnum];
+                                gid("website_name").style.font.weight = "300";
+                                tick();
+                            }
+                        }
+                        verified = !verified;
+                    }
+        
+        function findNextLetter(index,key) {
+            var isFound = false;
+            while(!isFound) {
+                
+                if (index >= key.length) {
+                    index = 0;
+                }
+                
+                if (vowels.indexOf(key.substring(index,index+1)) != -1) {
+                    
+                    index +=1;
+                    if (index >= key.length) {
+                        index = 0;
+                    }
+                } else {
+                    isFound = true
+                }
+            }
+            return key.substring(index,index+1);
+        }
+        
+        
+        function threeWordMap(challenge, key, wildcard) {
+            cResponse = "";
+            for (i = 0; i < challenge.length; i++) {
+                var index = key.indexOf(challenge.substring(i,i+1));
+                if (index == -1){
+                    cResponse += wildcard;
+                }
+                if( index != -1) {
+                    cResponse += findNextLetter(index+1,key);
+                }
+            }
+            return cResponse;
+        }
+        
+        
+        function respond(challenge){
+            
+            threeWord = gname("firstWord").value +
+            gname("secondWord").value +
+            gname("thirdWord").value;
+            
+            specialString = gname("specialString").value;
+            wildcard = gname("wildcard").value;
+            
+            
+            if(threeWord == "") {
+                alert("Please enter words");
+                wordWarning = true;
+                return ;
+            }
+            
+            if(wildcard == "") {
+                alert("Please enter one digit to use as wild card");
+                wildcardWarning = true;
+                return ;
+            }
+            
+            if(specialString == "") {
+                alert("Please enter the special string");
+                stringWarning = true;
+                return  ;
+            }
+            
+            flag=0;
+            for(i=0;i<threeWord.length;i++){
+                if(vowels.indexOf(threeWord[i])==-1){
+                    flag=1;
+                }
+            }
+            if(flag==0){
+                alert("The Words must have CONSONANTS!!");
+                stringWarning = true;
+                return  ;
+            }
+            
+            fResponse = threeWordMap(challenge, threeWord, wildcard);
+            fResponse =  fResponse + specialString;
+            
+            return fResponse;
+            
+        }
+        
+        
+        function checkRespond(challenge, guess){
+            //guess = guess.toLowerCase();
+            var a = respond(challenge);
+            if (a == guess)
+            return undefined;
+            else
+            return a;
+        }
+        
+        
+        function activateHints1() {
+            var guess1 = gname("I200").value.trim();
+            var guess2 = gname("I201").value.trim();
+
+            cResponse1 = respond ("amazon");
+            if(cResponse1 != undefined ){
+                cResponse2 = respond ("bestbuy");
+            }else{
+                cResponse2="";
+            }
+            
+            if (cResponse1 != undefined){
+                document.getElementById("p_hint200").innerHTML = cResponse1;
+                document.getElementById("p_hint201").innerHTML = cResponse2;
+            }
+            else {
+                document.getElementById("p_hint200").innerHTML = "";
+                document.getElementById("p_hint201").innerHTML = "";
+            }
+            
+            
+            if(guess1 == cResponse1 && guess2 == cResponse2){
+                gname("p_correct").style.display = 'block';
+                gid("p_checkButton1").style.display='none';
+                gid("p_nextButton1").style.display='block';
+                
+                document.getElementById("p_hint200").style.color='black'
+                if(guess1 != cResponse1)
+                document.getElementById("p_hint200").style.color='red'
+                else
+                document.getElementById("p_hint200").style.color='black'
+                
+                if(guess2 != cResponse2)
+                document.getElementById("p_hint201").style.color='red'
+                else
+                document.getElementById("p_hint201").style.color='black'
+                
+                gname("p_try").style.display='none'
+            }else{
+                gname("p_try").style.display='block'
+                document.getElementById("p_hint200").style.display='block'
+                document.getElementById("p_hint201").style.display='block'
+                
+                
+                document.getElementById("p_hint200").style.color='black'
+                if(guess1 != cResponse1)
+                document.getElementById("p_hint200").style.color='red'
+                else
+                document.getElementById("p_hint200").style.color='black'
+                if(guess2 != cResponse2)
+                document.getElementById("p_hint201").style.color='red'
+                else
+                document.getElementById("p_hint201").style.color='black'
+            }
+            return;
+        }
+        
+        function pauseVideo(){
+            
+            var iframe = document.getElementById("3wordStrategy");
+            iframe.src = iframe.src;
+            
+        }
+        
+        function pauseVideo1(){
+            var iframe = document.getElementById("3wordVideo1");
+            iframe.src = iframe.src;
+        }
+        
+        function pauseVideo2(){
+            var iframe2 = document.getElementById("3wordVideo2");
+            iframe2.src = iframe2.src;
+        }
+        
+        function showInstructions1(){
+            
+            if (flag1 == +1) {
+                document.getElementById("videoHint1").style.display = "block"
+            }
+            
+            if (flag1 == -1) {
+                document.getElementById("videoHint1").style.display = "none"
+            }
+            flag1 = flag1 * -1;
+        }
+        
+        function showInstructions2(){
+            
+            
+            if (flag2 == +1) {
+                document.getElementById("videoHint2").style.display = "block"
+            }
+            
+            if (flag2 == -1) {
+                document.getElementById("videoHint2").style.display = "none"
+                // pauseVideo2();
+                
+            }
+            flag2 = flag2 * -1;
+        }
+        
+        function showWords(){
+            
+            console.log("inside showWords");
+            threeWord = gname("firstWord").value +
+            gname("secondWord").value +
+            gname("thirdWord").value;
+            
+            
+            specialString = gname("specialString").value;
+            wildcard = gname ("wildcard").value;
+            
+            document.getElementById("hintWords").innerHTML = threeWord;
+            document.getElementById("hintWildcard").innerHTML = wildcard;
+            document.getElementById("hintSpecialString").innerHTML = specialString;
+        
+            if(gid("3wordhint").style.display == "block"){
+                gid("3wordhint").style.display="none";
+            }else{
+                gid("3wordhint").style.display = "block";
+                
+            }
+
+
+        }
+        
+        
+            </script>
+        
+        
+        <style>
+            .pw {
+                font-family: monospace;
+                font-size: 140%;
+                font-weight: bold;
+            }
+        
+        .hint {
+            color: black;
+            border : none;
+            font-size: 100%;
+            font-weight : bold;
+        }
+        
+        .correct {
+            color: green;
+        }
+        
+        .wrong {
+            color: red;
+        }
+        
+        
+        .buttonlink {
+            display: inline-block;
+            border-style: solid;
+            border-color: #bbb #888 #666 #aaa;
+            border-width: 3px 4px 4px 3px;
+            width: 9em;
+            height: 2em;
+            background-color: 	#FAEBD7;
+            line-height: 2;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            cursor:pointer;
+        }
+        
+        
+        .buttonlink2 {
+            display: inline-block;
+            border-style: solid;
+            border-color: #bbb #888 #666 #aaa;
+            border-width: 3px 4px 4px 3px;
+            width: 9em;
+            height: 2em;
+            background-color: 	#FAEBD7;
+            line-height: 2;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            cursor:pointer;
+            float : left;
+            margin-right:10px;
+        }
+        
+        
+        
+        .hintbutton {
+            display: inline-block;
+            border-style: solid;
+            border-color: #bbb #888 #666 #aaa;
+            border-width: 3px 4px 4px 3px;
+            width: 11em;
+            height: 2em;
+            background-color: #DAA520;
+            line-height: 2;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            cursor:pointer;
+            float : left;
+            margin-right:10px;
+        }
+        
+        
+        
+        
+        .buttonlink:hover {
+            border-color: #666 #aaa #bbb #888;
+            border-width: 4px 3px 3px 4px;
+            color: #000;
+        }
+        
+        .visible
+        {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 2s linear;
+        }
+        
+        .hidden
+        {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 2s, opacity 2s linear;
+        }
+        
+        
+        table {
+            border-collapse: collapse;
+            border-spacing: 10px 50px;
+            text-align: center;
+            clear: left;
+            
+        }
+        
+        th, td{
+            padding: 2px;
+            
+        }
+        
+        input {
+            width: 50px;
+            margin: 5px;
+            font-size: 15px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            /*             border: 5px ;  */
+        }
+        
+        .firstPageTable {
+            float:left;
+            margin:1em;
+            width:300px;
+            height:300px;
+            
+        }
+        
+        .colorTableHead {
+            color:#0000FF;
+        }
+        input[type="text"] {
+            width: 85%;
+            height: 100%;
+            box-sizing: border-box;
+            -webkit-box-sizing:border-box;
+            -moz-box-sizing: border-box;
+            style="background-color:#FCF5D8;">
+        }
+        .container{
+            /* width : 500px; */
+            width: 300px;
+            border: 2px solid #DAA520;
+            padding: 25px;
+            margin: 25px;
+        }
+        
+        .container2{
+            width : 700px;
+            /* border: 2px solid #DAA520; */
+            /* padding: 10px; */
+            margin-left: 5px;
+        }
+        
+        
+        
+            </style>
+    </head>
+    <body>
+        
+        <div id="welcome" margin-left:10px>
+            <p>Hello! Do you mind solving a couple of puzzles to warm up? </p>
+            <h3><font color="purple">Puzzle 1</font></h3>
+            <p>Guess Sam's password for Gmail based on his passwords for Amazon and BestBuy.</p>
+            <table style="width:400px; height:80px margin-bottom: 50px;"  border="1">
+                <tr>
+                    <th class="colorTableHead" style="color:#00008B">Website</th><td>Amazon</td><td>BestBuy</td><td>Gmail</td>
+                </tr>
+                <tr>
+                    <th class="colorTableHead" style="color:#00008B">Password</th><td>AmazonSam</td><td>BestBuySam</td><td><input placeholder="???" name="I001"><br></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="border=0"><div name = "I_hint001" class = "hint" style="display:none;">GmailSam</div></td>
+                </tr>
+            </table>
+            
+            <p>
+            <div id="I0_checkButton1" style="display:block;" class="buttonlink" onclick=" I_eval_0();"><font font="">Check</font></div>
+            </p>
+            
+            <h3 name="I0_try" style="display:none ;color:red"> Try again! </h3>
+            <h3 name = "I0_correct" class="correct" style = "display:none" > Correct! </h3>
+            
+            <p>This puzzle might have reminded you of your own passwords for the websites.</p>
+            <p>Do you see how easy it is for someone to impersonate you just by stealing one of your passwords?</p>
+            
+            <h3><font color="purple">Puzzle 2</font></h3>
+            <p>Guess Lily's password for Gmail based on her passwords for Amazon and BestBuy. </p>
+            <table style="width:400px; height:80px" border="1">
+                <tr>
+                    <th class="colorTableHead" style="color:#00008B">Website</th><td>Amazon</td><td>BestBuy</td><td>Gmail</td>
+                    
+                </tr>
+                <tr>
+                    <th class="colorTableHead" style="color:#00008B">Password</th><td>qjqdrB7!</td><td>xgfyfB7!</td><td>???</td>
+                </tr>
+                <tr>
+                    <td style="border:none"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                
+            </table>
+            
+            <p>In this hit, we want to teach you a strategy that you can use to design passwords like the last table.</p>
+            
+            <p>This hit will take less than <b>40 minutes</b> and we will pay you <b>$7</b>.</p>
+            
+            
+            <div id="I0_nextButton1" class="buttonlink" style="display:none" onclick="gid('warning').style.display='block'; gid('welcome').style.display = 'none';">Next</div>
+            
+            
+            <!-- <div id="I0_nextButton12" class="buttonlink" style="display:block" onclick="gid('warning').style.display='block'; gid('welcome').style.display = 'none';">Next2</div> -->
+            
+        </div>
+        
+        
+        <!----------------------------------------------------------------------------------------------------------------------------------------------->
+        
+        <div id= "warning" style="display:none; margin-left:10px">
+            <br>
+            <br>
+            <br>
+            
+            <center>
+                <h3>The goal of this experiment is to try our mental algorithms to generate passwords.</h3>
+                <h3>We ask you not to take any notes during this study (notes on paper or online notes). </h3>
+                <h3>Only use what you see on the screen to answer the questions.</h3>
+            </center>
+            
+            <br>
+            <br>
+            
+            <center>
+                <div id="warning_nextButton" class="buttonlink" style="display:block" onclick="gid('instructions').style.display='block'; gid('warning').style.display = 'none';tick();">Agree</div>
+            </center>
+        </div>
+        
+        
+        <!----------------------------------------------------------------------------------------------------------------------------------------------->
+        
+        <div id="instructions" style="display:none; margin-left:10px">
+            
+            <h1>Instructions</h1>
+            
+            <p>
+            In this hit we teach you a new strategy for generating secure passwords. The following video describes this strategy.
+            </p>
+            
+            <p>
+            <iframe id = "3wordStrategy" width="400"
+                height="300" src="https://www.youtube.com/embed/HqFhimpK1iM" frameborder="5" align="center" hspace="10">
+            </iframe>
+            </p>
+            
+            <p> Try generating one password to make sure you understood the method.</p>
+            <table border="1">
+                <tr>
+                    <th>3Words</th>
+                    <th>Wildcard</th>
+                    <th>Special String</th>
+                </tr>
+                <tr>
+                    <td>computer-moustache-jellybox</td>
+                    <td>x</td>
+                    <td>B7!</td>
+                </tr>
+            </table>
+            
+            <br>
+            <br>
+            
+            <table border="1" class="pw">
+                <tr class="colorTableHead" style="color:#00008B"><td>Website</td><td>Password</td>
+                    <td></td>
+                </tr>
+                <tr><td>xylophone</td>
+                    <td><input name="I300" type="text"></td>
+                    <td> <div id = "p_hint300" class = "hint" style="display:none;"> </div> </td>
+                </tr>
+            </table>
+            
+            <br>
+            
+            <div id="I_checkButton3" style="display:block;" class="buttonlink" onclick=" I_eval_3();"><font font="">Check</font></div>
+            
+            <h3 name="I3_try" style="display:none ;color:red"> Try again! </h3>
+            <h3 name = "I3_correct" class="correct" style = "display:none" > Correct! </h3>
+            
+            <div id="I_hint300" style="display:none">
+                
+                <ul>
+                    <li> <font color=red><b>x</b> goes to <b>c</b>. </font>
+                        <b>x</b> appears in jellybo<b>x</b>. Wrap around to find the letter after it which <b>c</b>.</li>
+                    
+                    <li><font color=red><b>y</b> goes to <b>b</b>.</font>
+                        <b>y</b> appears in jell<b>y</b>box. You should output the consonant after it which is <b>b</b>.</li>
+                    
+                    <li><font color=red><b>l</b> goes to <b>l</b>.</font>
+                        <b>l</b> appears in je<b>l</b>lybox. You should output the consonant after it which is <b>l</b>.</li>
+                    
+                    <li><font color=red><b>o</b> goes to <b>m</b>.</font>
+                        <b>o</b> appears in c<b>o</b>mputer. You should output the consonant after it which is <b>m</b>.</li>
+                    
+                    <li>  <font color=red><b>p</b> goes to <b>t</b></font>.
+                        <b>p</b> appears in com<b>p</b>uter. You should output the <b>consonant</b> after it which is <b>t</b>.</li>
+                    
+                    <li> <font color=red><b>h</b> goes to <b>j</b>.</font>
+                        <b>h</b> appears in moustac<b>h</b>e. You should output the <b>consonant</b> after it which is <b>j</b> in <b>j</b>ellybox.</li>
+                    
+                    <li><font color=red><b>o</b> goes to <b>m</b>.</font>
+                        <b>o</b> appears in c<b>o</b>mputer. You should output the consonant after it which is <b>m</b>.</li>
+                    
+                    <li> <font color=red><b>n</b> goes to <b>x</b>.</font>
+                        <b>n</b> does not appear in the word sequnece, so you should output the wildcard <b>x</b>.</li>
+                    
+                    <li> <font color=red><b>e</b> goes to <b>r</b>.</font>
+                        <b>e</b> appears in comput<b>e</b>r. You should output the consonant after it which is <b>r</b>.</li>
+                    
+                    <li>Add the string <b>B7!</b> to the end of your password.</li>
+                </ul>
+                
+            </div>
+            
+            
+            <div id="great" style="display:none">
+                Great! You just learnt a new strategy for generating secure passwords. In the next page, we will ask you to design such a method for yourself.
+            </div>
+            <br>
+            <br>
+            
+            <div id="I_nextButton3" class="buttonlink" style="display:none" onclick="gname('instruction_time').value = tock(); gid('instructions').style.display = 'none'; gid('3words').style.display = 'block'; pauseVideo(); tick()">Next</div>
+            
+        </div>
+        
+        
+        <!------------------------------------------------------------------------------------------------------------------------------------------------->
+        
+        
+        <div id="3words" style="display:none; width:600px; margin-left:10px">
+            
+            <ul>
+                
+                <li>Choose three different words that together contain many letters of the alphabet.
+                    
+                    <table style="width:100%">
+                        <tr>
+                            <th><input type="text" size="20" class="form-control" name="firstWord" placeholder="word1"> </th>
+                            
+                            <th><input type="text" size="20" class="form-control" name="secondWord" placeholder="word2"></th>
+                            
+                            <th><input type="text" size="20" class="form-control" name="thirdWord" placeholder="word3"></th>
+                        </tr>
+                        
+                    </table>
+                    
+                    <br>
+                    
+                    <li> Choose a letter as the wildcard:
+                        <table style="width:100%">
+                            <tr>
+                                <td>
+                        <input name="wildcard" type="text" maxlength="10" size="10" placeholder="Wildcard">
+                            </td>
+                                </tr>
+                            </table>
+                            <br>
+                            
+                            <li>Choose a special string that contains an uppercase letter, a number and a special character:
+                                <br>
+                                
+                                <table style="width:100%">
+                                    <tr>
+                                        <td>
+                                            
+                                            <input name="specialString" type="text" maxlength="10" size="10" placeholder="Special String">
+                                            
+                                                </td>
+                                    </tr>
+                                </table>
+                                    </ul>
+            <p>Now try to generate a couple of passwords using the method that you learned.</p>
+            
+            <table align="center" border="1" class="pw">
+                <tr class="colorTableHead" style="color:#00008B"><td>Website</td><td>Password</td>
+                    <td></td>
+                </tr>
+                <tr><td>Amazon</td>
+                    <td><input name="I200" type="text"></td>
+                    <td> <div id = "p_hint200" class = "hint" style="display:none;"> </div> </td>
+                </tr>
+                <tr><td>BestBuy</td>
+                    <td><input name="I201" type="text"></td>
+                    <td> <div id = "p_hint201" class = "hint" style="display:none;"> </div></td>
+                </tr>
+            </table>
+            <br>
+            
+            <p>&nbsp;</p>
+            
+            <div id="p_checkButton1" style="display:block;" class="buttonlink2" onclick="activateHints1()";><font font="">Check</font></div>
+            
+            <div id = "p_nextButton1" class="buttonlink2" style="display:none" onclick="gname('make3words_time').value = tock(); gid('3words').style.display = 'none'; gid('fun_div').style.display = 'block'; tick();"> Next </div>
+            
+            <div class="hintbutton" onclick ="showInstructions1()"> Show instructions </div>
+            
+            <br>
+            <br>
+            <h3 name="p_try" style="display:none ;color:red"> Try again! </h3>
+            <h3 name = "p_correct" class="correct" style = "display:none" > Correct! </h3>
+            
+            
+            <br>
+            
+            <div id = "videoHint1"  style="display:none">
+                <!-- <iframe id = "3wordVideo1" width="400"
+                 height="300" src="https://www.youtube.com/embed/HqFhimpK1iM" frameborder="5" align="center" hspace="10">
+                 </iframe> -->
+                
+                <div class="container">
+                    <h4>Given a website name, e.g., <font color="black">apple</font>, generate your password as follows:</h4>
+                    <ol>
+                        <li>Start at the first letter of <font color="black">apple</font>, (<font color="black"> a </font>).</li>
+                        <li>Find the first occurrence of the letter in your word sequence and output the next <b>consonant</b>.
+                            <ul>
+                                <li> If the letter does not appear in your word sequence, output the wildcard.</li>
+                                <li> If the letter is the last letter in your word sequence, wrap around.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            Repeat on the remaining letters of <font color="black">apple</font> till you reach the end.
+                        </li>
+                        <li>
+                            Attach the special string.
+                        </li>
+                    </ol>
+                    <br>
+                    
+                </div> <!-- end of container -->
+                
+            </div> <!--  end of VideoHint1 -->
+            
+        </div>
+        
+        
+        <!------------------------------------------------------------------------------------------------------------------------------------------------->
+        
+        <div id="fun_div" style="display:none;" class="container2">
+            
+            <h1>Try generating passwords</h1><h2 id="webCounter" margin-left:20px style="display:block" > 0/20 </h2>
+            
+            
+            <ul>
+                <li> Now you can generate a whole new set of passwords! Let's try this method on a few websites.</li>
+                <li> Click on the hints buttons to get a reminder on your words and the instructions.</li>
+            </ul>
+            
+            <div id="lastTable" style="display:none">
+                <table align="center" >
+                    <tr>
+                        <td>
+                            <table align="center" border="1" >
+                                <tr><td style="padding: 20px;">Website</td><td style="padding: 20px;" >Password</td></tr>
+                                <tr>
+                                    <td id="website_name" style="font-size:20px;font-weight:900; padding: 20px;"></td>
+                                    <td style="padding: 20px;">
+                                        <textarea cols="20" name="q0" placeholder="Type password" style="font-size:18px" rows="1" ></textarea>
+                                        
+                                        <textarea cols="20" name="q1" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q2" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q3" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q4" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q5" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q6" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q7" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q8" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q9" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q10" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q11" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q12" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q13" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q14" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q15" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q16" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q17" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q18" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                        <textarea cols="20" name="q19" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    </td>
+                                    <!-- verify_div -->
+                                    
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="verify_div"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            
+            
+            <br>
+            <div class="buttonlink" id="eval_button" onclick="eval_click_password(); gid('3words').style.display = 'none';">Begin</div>
+            
+            <p>&nbsp;</p>
+            
+            <div class="hintbutton" onclick ="showWords()"> Tell me my words </div>
+            <div class="hintbutton" onclick ="showInstructions2()"> Show instructions </div>
+            
+            <br>
+            <br>
+            <br>
+            <div id = "videoHint2"  style="display:none">
+                <!-- <iframe id = "3wordVideo2" width="400"
+                 height="300" src="https://www.youtube.com/embed/HqFhimpK1iM" frameborder="5" align="center" hspace="10">
+                 </iframe> -->
+                
+                <div class="container">
+                    <h4>Given a website name, e.g., <font color="black">apple</font>, generate your password as follows:</h4>
+                    <ol>
+                        <li>Start at the first letter of <font color="black">apple</font>, (<font color="black"> a </font>).</li>
+                        <li>Find the first occurrence of the letter in your word sequence and output the next <b>consonant</b>.
+                            <ul>
+                                <li> If the letter does not appear in your word sequence, output the wildcard.</li>
+                                <li> If the letter is the last letter in your word sequence, wrap around.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            Repeat on the remaining letters of <font color="black">apple</font> till you reach the end,
+                        </li>
+                        <li>
+                            Attach the special string.
+                        </li>
+                    </ol>
+                    <br>
+                    
+                </div>
+                
+            </div>
+            <br>
+            <div id = "3wordhint" style="display:none">
+                <table border="1">
+                    <tr>
+                        <th>3Words</th>
+                        <th>Wildcard</th>
+                        <th>Special String</th>
+                    </tr>
+                    <tr>
+                        <td><div id = "hintWords"    > hello </div> </td>
+                        <td><div id = "hintWildcard" > hello </div> </td>
+                        <td><div id = "hintSpecialString"> hello</div> </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <br>
+            <br>
+            <br>
+            
+        </div>
+        
+        
+        <!------------------------------------------------------------------------------------------------------------------------------------------------->
+        
+        <div id="feedback" style="display:none;">
+            <p> You are one of the first users to try this password strategy, thank you so much!  Please help us improve this HIT by answering the following questions.</p>
+            <ul>
+                <li> On a scale of 1-10, was this task enjoyable/fun? (1: painful, 10: I enjoyed it)
+                    <textarea rows="1" cols="10" placeholder="fun" name="fun"></textarea> </li></li>
+                
+                <li> On a scale of 1-10, how hard was the task? (1: the easiest, 10: the hardest)
+                    <textarea rows="1" cols="10" placeholder="hardness" name="hardness"></textarea> </li>
+                
+                <li> Did password generation become easier towards the end?
+                    <textarea rows="1" cols="10" placeholder="Yes/No" name="easyEnding"></textarea> </li>
+                
+                <li> Would you spend 5 minutes to choose three words for yourself and adopt this strategy in real life?
+                    <textarea rows="1" cols="10" placeholder="Yes/No" name="yesNo1"></textarea></li>
+                
+                <li> Did you write anything down? We ask this for our own statistics. Your answer to this question does not affect acceptance of your hit or your payment.
+                    <textarea rows="1" cols="10" placeholder="Yes/No" name="yesNo2"></textarea></li>
+            </ul>
+            
+            
+            <p>Any other feedback? We'd love to hear!</p>
+            
+            <textarea rows="3" cols="80" placeholder="Feedback" name="feedback"></textarea>
+            
+            <p>For more information on password strategies, visit <a href="http://safepasswords.org">our website </a>.
+            <p>  You may now submit this HIT. </p>
+            <h1>Thank You!!</h1>
+            
+            <!-- </div> -->
+        </div>
+        
+        
+        <input type="hidden" name="wordHintCount" value="0" />
+        <input type="hidden" name="instruction_time" value="0" />
+        <input type="hidden" name="make3words_time" value="0" />
+        <input type="hidden" name="practice_final" value="0" />
+        
+        
+        <input type="hidden" name="q0_time" value="0" />
+        <input type="hidden" name="q1_time" value="0" />
+        <input type="hidden" name="q2_time" value="0" />
+        <input type="hidden" name="q3_time" value="0" />
+        <input type="hidden" name="q4_time" value="0" />
+        <input type="hidden" name="q5_time" value="0" />
+        <input type="hidden" name="q6_time" value="0" />
+        <input type="hidden" name="q7_time" value="0" />
+        <input type="hidden" name="q8_time" value="0" />
+        <input type="hidden" name="q9_time" value="0" />
+        <input type="hidden" name="q10_time" value="0" />
+        <input type="hidden" name="q11_time" value="0" />
+        <input type="hidden" name="q12_time" value="0" />
+        <input type="hidden" name="q13_time" value="0" />
+        <input type="hidden" name="q14_time" value="0" />
+        <input type="hidden" name="q15_time" value="0" />
+        <input type="hidden" name="q16_time" value="0" />
+        <input type="hidden" name="q17_time" value="0" />
+        <input type="hidden" name="q18_time" value="0" />
+        <input type="hidden" name="q19_time" value="0" />
+        
+        
+        <input type="hidden" name="q0_correct" value="0" />
+        <input type="hidden" name="q1_correct" value="0" />
+        <input type="hidden" name="q2_correct" value="0" />
+        <input type="hidden" name="q3_correct" value="0" />
+        <input type="hidden" name="q4_correct" value="0" />
+        <input type="hidden" name="q5_correct" value="0" />
+        <input type="hidden" name="q6_correct" value="0" />
+        <input type="hidden" name="q7_correct" value="0" />
+        <input type="hidden" name="q8_correct" value="0" />
+        <input type="hidden" name="q9_correct" value="0" />
+        <input type="hidden" name="q10_correct" value="0" />
+        <input type="hidden" name="q11_correct" value="0" />
+        <input type="hidden" name="q12_correct" value="0" />
+        <input type="hidden" name="q13_correct" value="0" />
+        <input type="hidden" name="q14_correct" value="0" />
+        <input type="hidden" name="q15_correct" value="0" />
+        <input type="hidden" name="q16_correct" value="0" />
+        <input type="hidden" name="q17_correct" value="0" />
+        <input type="hidden" name="q18_correct" value="0" />
+        <input type="hidden" name="q19_correct" value="0" />
+        
+        
+        <input type="hidden" name="q0_0" value="0" />
+        <input type="hidden" name="q1_0" value="0" />
+        <input type="hidden" name="q2_0" value="0" />
+        <input type="hidden" name="q3_0" value="0" />
+        <input type="hidden" name="q4_0" value="0" />
+        <input type="hidden" name="q5_0" value="0" />
+        <input type="hidden" name="q6_0" value="0" />
+        <input type="hidden" name="q7_0" value="0" />
+        <input type="hidden" name="q8_0" value="0" />
+        <input type="hidden" name="q9_0" value="0" />
+        <input type="hidden" name="q10_0" value="0" />
+        <input type="hidden" name="q11_0" value="0" />
+        <input type="hidden" name="q12_0" value="0" />
+        <input type="hidden" name="q13_0" value="0" />
+        <input type="hidden" name="q14_0" value="0" />
+        <input type="hidden" name="q15_0" value="0" />
+        <input type="hidden" name="q16_0" value="0" />
+        <input type="hidden" name="q17_0" value="0" />
+        <input type="hidden" name="q18_0" value="0" />
+        <input type="hidden" name="q19_0" value="0" />
+        
+        
+        <input type="hidden" name="q0_1" value="0" />
+        <input type="hidden" name="q1_1" value="0" />
+        <input type="hidden" name="q2_1" value="0" />
+        <input type="hidden" name="q3_1" value="0" />
+        <input type="hidden" name="q4_1" value="0" />
+        <input type="hidden" name="q5_1" value="0" />
+        <input type="hidden" name="q6_1" value="0" />
+        <input type="hidden" name="q7_1" value="0" />
+        <input type="hidden" name="q8_1" value="0" />
+        <input type="hidden" name="q9_1" value="0" />
+        <input type="hidden" name="q10_1" value="0" />
+        <input type="hidden" name="q11_1" value="0" />
+        <input type="hidden" name="q12_1" value="0" />
+        <input type="hidden" name="q13_1" value="0" />
+        <input type="hidden" name="q14_1" value="0" />
+        <input type="hidden" name="q15_1" value="0" />
+        <input type="hidden" name="q16_1" value="0" />
+        <input type="hidden" name="q17_1" value="0" />
+        <input type="hidden" name="q18_1" value="0" />
+        <input type="hidden" name="q19_1" value="0" />
+        
+        
+        <input type="hidden" name="q0_2" value="0" />
+        <input type="hidden" name="q1_2" value="0" />
+        <input type="hidden" name="q2_2" value="0" />
+        <input type="hidden" name="q3_2" value="0" />
+        <input type="hidden" name="q4_2" value="0" />
+        <input type="hidden" name="q5_2" value="0" />
+        <input type="hidden" name="q6_2" value="0" />
+        <input type="hidden" name="q7_2" value="0" />
+        <input type="hidden" name="q8_2" value="0" />
+        <input type="hidden" name="q9_2" value="0" />
+        <input type="hidden" name="q10_2" value="0" />
+        <input type="hidden" name="q11_2" value="0" />
+        <input type="hidden" name="q12_2" value="0" />
+        <input type="hidden" name="q13_2" value="0" />
+        <input type="hidden" name="q14_2" value="0" />
+        <input type="hidden" name="q15_2" value="0" />
+        <input type="hidden" name="q16_2" value="0" />
+        <input type="hidden" name="q17_2" value="0" />
+        <input type="hidden" name="q18_2" value="0" />
+        <input type="hidden" name="q19_2" value="0" />
+        
+    </body>
+</html>

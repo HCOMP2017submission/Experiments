@@ -1,0 +1,2274 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <script>
+            
+            
+            var challenges = ["apple", "gatech", "delta", "practice", "challenge" , "pncbank", "drop", "gmail", "chase", "microsoft", "bankofa", "stanford", "facebook", "google", "instagram", "sprint", "booking", "reddit", "linkedin", "bing"];
+            
+            // var SPECIAL = "B7!";
+            var practice1_length = 19;
+            var practice2_length = 19;
+            var practice3_length = 19;
+            var practice4_length = 19;
+            var practice5_length = 20;
+            var practice6_length = 8;
+            var practice7_length = 8;
+            var webCounterVar = 0;
+            var letterCodeFlag = +1;
+            var instFlag = +1;
+            
+            var done_can_submit = false;
+            
+            var words_ = new Array(40);
+            var lmap = new Array(22);
+            
+            
+            letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q','r' ,'s' ,'t'];
+            letters2 = ['b','c','d','f','g','h','j', 'k','l','m','n','p','q','r','s','t', 'v', 'w','x', 'y','z'];
+            
+            tmpWords = ['salam', 'olaghe', 'aziz', 'halet', 'chetore', 'khoob', 'khosh', 'salamati', 'halet', 'chetore', 'dishab', 'oomadam'
+                        , 'dare', 'khoonatoon', 'khoone', 'naboodi', 'chera', 'naboodi', 'kharzare', 'kardi']
+                        permutation = [14, 1, 15, 3, 18, 10, 6, 7, 12, 19, 5, 11, 8, 13, 0, 2, 16, 17, 4, 9]
+                        
+                        
+                        
+                        function gid(id) {
+                            return document.getElementById(id);
+                        }
+        
+        function hint(el, text) {
+            el.innerText = text;
+        }
+        
+        function gname(name) {
+            return document.getElementsByName(name)[0];
+        }
+        
+        function answer(challenge) {
+            var res = "";
+            challenge.toLowerCase().split("").forEach(function (ch) {
+                                                      res += lmap[ch.charCodeAt(0) - 'a'.charCodeAt(0) + 1];
+                                                      });
+                                                      SPECIAL = gname("specialStringInput").value;
+                                                      res = res + SPECIAL;
+                                                      if (!arguments.callee.caller || !arguments.callee.caller.toString().match(/check_answer/)) {
+                                                          gname("counter").value = parseInt(gname("counter").value) + 1;
+                                                      }
+                                                      return res;
+        }
+        
+        function answer_password(challenge) {
+            var res = "";
+            challenge.toLowerCase().split("").forEach(function (ch) {
+                                                      res += lmap[ch.charCodeAt(0) - 'a'.charCodeAt(0) + 1];
+                                                      });
+                                                      SPECIAL = gname("specialStringInput").value;
+                                                      res = res + SPECIAL;
+                                                      return res;
+        }
+        
+        function answer_letter(challenge) {
+            
+            var res = "";
+            challenge.toLowerCase().split("").forEach(function (ch) {
+                                                      res += lmap[ch.charCodeAt(0) - 'a'.charCodeAt(0) + 1];
+                                                      });
+                                                      
+                                                      if (!arguments.callee.caller || !arguments.callee.caller.toString().match(/check_answerLetter/)) {
+                                                          gname("counter").value = parseInt(gname("counter").value) + 1;
+                                                      }
+                                                      return res;
+        }
+        
+        function check_answerLetter(challenge, guess) {
+            guess = guess.toLowerCase();
+            var a = answer_letter(challenge);
+            return (a == guess) ? undefined : a;
+        }
+        
+        function check_answerPassword(challenge, guess) {
+            var a = answer_password(challenge);
+            return (a == guess) ? undefined : a;
+        }
+        
+        function check_answerWord(challenge, guess) {
+            var a = guess.toLowerCase();
+            return (a == challenge) ? undefined : a;
+        }
+        
+        function input_enter(id, callback) {
+            challenge = gid(id + "_challenge").value;
+            guess = gid(id + "_guess").value;
+            check_answer(challenge, guess, callback);
+        }
+        var timer;
+        function tick() {
+            timer = new Date();
+        }
+        
+        function tock() {
+            return (new Date() - timer);
+        }
+        
+ 
+        
+        setInterval(function () {
+                    var button = gid("submitButton");
+                    if (!button) return;
+                    button.style.display = done_can_submit ? "block" : "none";
+                    button.disabled = !done_can_submit;
+                    }, 100)
+                    
+                    var qnum = -1;
+                    var verified = true;
+                    var tries = 0
+                    function eval_click_password() {
+                        if (!verified) {
+                            var guess = gname("q" + qnum).value.trim();
+                            if (guess == "") return; // accidental button press without entering anything
+                            
+                            
+                            var gold = check_answerPassword(challenges[qnum], guess);
+                            
+                            gname("q"+qnum+"_"+tries).value = gold;
+                            console.log("q"+qnum+"_"+tries);
+                            console.log(gname("q"+qnum+"_"+tries).value);
+                            
+                            var html;
+                            if (gold != undefined && tries > 1) {
+                                html = "<span class='wrong'>The correct answer would be <span class='pw'>" + gold + "</span>";
+                                gname("q" + qnum + "_correct").value = "0";
+                                
+                                webCounterVar = webCounterVar + 1;
+                                document.getElementById("webCounter").innerHTML = webCounterVar + "/20";
+                                
+                                gid("eval_button").innerHTML = "Next";
+                                gname('q' + qnum + "_time").value = tock();
+                                gname("q" + qnum).readOnly = true;
+                                
+                            } else {
+                                if( gold != undefined){
+                                    html = "<span class='wrong'>Try again!</span>";
+                                    
+                                    
+                                    
+                                    tries=tries+1
+                                    verified=!verified
+                                }else{
+                                    html = "<span class='correct'>CORRECT!</span>";
+                                    gid("letterCodeHint").style.display = "none";
+                                    
+                                    webCounterVar = webCounterVar + 1;
+                                    document.getElementById("webCounter").innerHTML = webCounterVar + "/20";
+                                    
+                                    gname("q" + qnum + "_correct").value = "1";
+                                    console.log("here inside else")
+                                    console.log(gname("q" + qnum + "_correct"))
+                                    console.log(gname("q" + qnum + "_correct").value)
+                                    
+                                    gid("eval_button").innerHTML = "Next";
+                                    gname('q' + qnum + "_time").value = tock();
+                                    gname("q" + qnum).readOnly = true;
+                                    
+                                }
+                            }
+                            gid("verify_div").innerHTML = html;
+                        } else {
+                            tries=0
+                            gid("lastTable").style.display="block";
+                            gid("eval_button").innerHTML = "Submit password";
+                            gid("verify_div").innerHTML = "";
+                            if (qnum == -1) {
+                                gid("fun_div").style.display = 'block';
+                            } else {
+                                gname("q" + qnum).style.display = "none";
+                            }
+                            qnum++;
+                            gid("letterCodeHint").style.display = "none";
+                            
+                            if (qnum >= challenges.length) {
+                                gid("feedback").style.display = "block";
+                                gid("welcome").style.display = "none";
+                                gid("fun_div").style.display = "none";
+                                gname("practice_final").value = tock();
+                                done_can_submit=true;
+                                tick() // Start measuring the feedback time.
+                                return;
+                            } else {
+                                gname("q" + qnum).style.display = "block";
+                                gid("website_name").innerHTML = challenges[qnum];
+                                tick();
+                            }
+                        }
+                        verified = !verified;
+                    }
+        
+        
+        
+        function I_eval_0() {
+            var guess2 = gname("I001").value.trim();
+            
+            if(guess2 == "GmailSam"){
+                
+                gid("I0_checkButton1").style.display='none';
+                gid("I0_nextButton1").style.display='block';
+                gname("I_hint001").style.color='black'
+                gname("I0_try").style.display='none'
+                gname("I0_correct").style.display = 'block'
+                
+            }else{
+                gname("I_hint001").style.color='red'
+                gname("I0_try").style.display='block'
+                gname("I_hint001").style.display='block'
+            }
+            return;
+        }
+        
+        
+        function I_eval_1(){
+            
+            var guess1 = gname("I100").value.trim();
+            var guess2 = gname("I101").value.trim();
+            
+            
+            if(guess1 == "qjqdrB7!" && guess2 == "lnltgclqB7!"){
+                gid("I1_checkButton").style.display = 'none';
+                gid("I1_nextButton").style.display = 'block';
+                gname("I1_try").style.display = 'none';
+                // gname("I1_correct").style.display = 'block';
+                
+                
+                gid("I_hint100").style.display = 'block';
+                gid("I_hint100").innerHTML = "Correct!";
+                gid("I_hint100").style.color = "green";
+                
+                gid("I_hint101").style.display = 'block';
+                gid("I_hint101").innerHTML = "Correct!";
+                gid("I_hint101").style.color = "green";
+                
+                gid("ending").style.display = 'block';
+                gid("amazonhint").style.display = 'none'
+                
+            }else{
+                gid("I_hint100").style.display = 'block';
+                gid("I_hint101").style.display = 'block';
+                gname("I1_try").style.display = 'block';
+                gid("amazonhint").style.display = 'block'
+                
+                if(guess1 != "qjqdrB7!" && guess2 == "lnltgclqB7!"){
+                    gid("I_hint100").innerHTML = "Wrong!";
+                    gid("I_hint100").style.color = "red";
+                    
+                    gid("I_hint101").innerHTML = "Correct!";
+                    gid("I_hint101").style.color = "green";
+                }
+                if(guess1 == "qjqdrB7!" && guess2 != "lnltgclqB7!"){
+                    gid("I_hint100").innerHTML = "Correct!";
+                    gid("I_hint100").style.color = "green";
+                    
+                    gid("I_hint101").innerHTML = "Wrong!";
+                    gid("I_hint101").style.color = "red";
+                    
+                }
+                if (guess1 != "qjqdrB7!" && guess2 != "lnltgclqB7!") {
+                    gid("I_hint100").innerHTML = "Wrong!";
+                    gid("I_hint100").style.color = "red";
+                    
+                    gid("I_hint101").innerHTML = "Wrong!";
+                    gid("I_hint101").style.color = "red";
+                }
+            }
+        }
+        
+        
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+        
+        function assign_rand_letter(index){
+            lmap[Number(index)]=letters2[getRandomInt(0,21)];
+            
+            gname("map"+index).value=lmap[index];
+            return;
+        }
+        
+        function is_map_full(){
+            t=1;
+            
+            // set_mapping_tmp();
+            
+            for (i = 1; i < 21; i++) {
+                if(lmap[i]==null){
+                    t=0;
+                }
+                
+            }
+            
+            if(t==1){
+                
+                gname('mapping_t').value = tock();
+                gid('words').style.display='block';
+                gid('mapping').style.display = 'none';
+                tick();
+                set_mapping();
+                gname("map_not_full").style.display='none';
+                saveLMapping();
+                // gid("mapEnding").style.display = 'block';
+            }else{
+                gname("map_not_full").style.display='block';
+            }
+        }
+        
+        function set_mapping(){
+            for(i=1;i<21;i++){
+                gname("wmap"+i).value=lmap[i];
+            }
+        }
+        
+        function saveLMapping(){
+            for (i=1; i<21; i++){
+                gname("lmapString").value = gname("lmapString").value + "-" + lmap[i];
+            }
+            console.log("lmapString: ", gname("lmapString").value )
+        }
+        
+        function saveWMapping(){
+            for (i=1; i<21; i++){
+                gname("wmapString").value = gname("wmapString").value + "-" + words[i];
+            }
+            console.log("wmapString: ", gname("wmapString").value ) ;
+        }
+        
+        
+        function set_mapping_tmp(){
+            for(i=1;i<21;i++){
+                lmap[i]=letters[getRandomInt(0,21)];
+            }
+        }
+        
+        function is_words_full(){
+            t=1;
+            
+            // set_memorization1_tmp();
+            
+            for ( i=1;i<21;i++){
+                if(gname("word"+i).value.trim()==""){
+                    t=0;
+                }else{
+                    words[i]=gname("word"+i).value.trim();
+                }
+            }
+            if(t==1){
+                gname('words_t').value = tock();
+                gid('memorization1').style.display='block';
+                gid('words').style.display = 'none';
+                tick();
+                set_memorization1();
+                set_memorization2();
+                gname("words_not_full").style.display='none';
+                saveWMapping();
+            }else{
+                gname("words_not_full").style.display='block';
+            }
+        }
+        
+        function set_memorization1(){
+            for(i=1;i<11;i++){
+                gname("1_lmap"+i).value=lmap[i];
+                gname("1_wmap"+i).value=words[i];
+                gname("h_memorization"+i).textContent=letters[i-1]+" "+lmap[i]+" "+words[i];
+            }
+        }
+        
+        
+        function set_memorization1_tmp(){
+            for(i=1; i<21; i++){
+                gname("word"+i).value=tmpWords[i]
+            }
+        }
+        
+        
+        function set_memorization2(){
+            for(i=11;i<21;i++){
+                gname("1_lmap"+i).value=lmap[i];
+                gname("1_wmap"+i).value=words[i];
+                gname("h_memorization"+i).textContent=letters[i-1]+" "+lmap[i]+" "+words[i];
+                // gname("1_lwmap"+i).value=letters[i-1]+" "+lmap[i]+" "+"gavenar";
+            }
+            
+        }
+        function set_practice(){
+            for(i=1;i<21;i++){
+                gname("2_lmap"+i).value = lmap[i];
+                gname("h_practice"+i).textContent = words[i];
+                gname("h_spractice"+i).textContent = lmap[i]+ "(" + words[i] + ")";
+                gname("h_fpractice"+i).textContent = lmap[permutation[i-1]+1];
+            }
+            
+        }
+        
+        function eval_memorization1(){
+            t=1;
+            for(i=1;i<11;i++){
+                st1=gname("1_lwmap"+i).value.trim();
+                st2=gname("h_memorization"+i).textContent;
+                if(st1!=st2){
+                    t=0;
+                }
+            }
+            
+            if(t==1){
+                gid("memcheckButton1").style.display='none';
+                gid("memnextButton1").style.display='block';
+                gname("memorization_try1").style.display='none'
+                
+            }else{
+                gname("memorization_try1").style.display='block'
+            }
+        }
+        
+        function eval_memorization2(){
+            t=1;
+            for(i=11;i<21;i++){
+                st1=gname("1_lwmap"+i).value.trim();
+                st2=gname("h_memorization"+i).textContent;
+                if(st1!=st2){
+                    t=0;
+                }
+            }
+            
+            if(t==1){
+                gid("memcheckButton2").style.display='none'
+                gid("memnextButton2").style.display='block'
+                gname("memorization_try2").style.display='none'
+            }else{
+                gname("memorization_try2").style.display='block'
+            }
+            
+        }
+        
+        function eval_practice_1(){
+            t=1
+            for( i=1;i<21;i++){
+                st1=gname("2_wmap"+i).value.trim();
+                st2=words[i];
+                if(st1!=st2){
+                    t=0;
+                }
+            }
+            
+            if(t==1){
+                gid("pracnextButton1").style.display='block';
+                gid("praccheckButton1").style.display='none';
+                gname("prac_try1").style.display='none';
+            }else{
+                gname("prac_try1").style.display='block';
+            }
+            
+        }
+        function activatehint_memorization1(){
+            for(i=1;i<11;i++){
+                gname("h_memorization"+i).style.display='block';
+                st1=gname("1_lwmap"+i).value.trim();
+                st2=gname("h_memorization"+i).textContent;
+                console.log("st2", st2);
+                if(st1==st2){
+                    gname("h_memorization"+i).style.color='black';
+                }else{
+                    gname("h_memorization"+i).style.color='red';
+                }
+            }
+        }
+        function activatehint_memorization2(){
+            for(i=11;i<21;i++){
+                gname("h_memorization"+i).style.display='block';
+                st1=gname("1_lwmap"+i).value.trim();
+                st2=gname("h_memorization"+i).textContent;
+                if(st1==st2){
+                    gname("h_memorization"+i).style.color='black';
+                }else{
+                    gname("h_memorization"+i).style.color='red';
+                }
+            }
+        }
+        function activateHints_prac1(){
+            for(i=1;i<21;i++){
+                gname("h_practice"+i).style.display='block';
+                st1=gname("2_wmap"+i).value.trim();
+                st2=words[i];
+                if(st1==st2){
+                    gname("h_practice"+i).style.color='black';
+                }else{
+                    gname("h_practice"+i).style.color='red';
+                }
+            }
+        }
+        
+        function eval_practice_2(){
+            t=1
+            for( i=1;i<21;i++){
+                st1=gname("3_lmap"+i).value.trim();
+                st2=lmap[i];
+                if(st1!=st2){
+                    t=0;
+                }
+            }
+            if(t==1){
+                gid("pracnextButton2").style.display='block';
+                gid("praccheckButton2").style.display='none';
+                gname("prac_try2").style.display='none';
+            }else{
+                gname("prac_try2").style.display='block';
+            }
+            
+        }
+        
+        function activateHints_prac2(){
+            for(i=1;i<21;i++){
+                gname("h_spractice"+i).style.display='block';
+                st1=gname("3_lmap"+i).value.trim();
+                st2=lmap[i];
+                if(st1==st2){
+                    gname("h_spractice"+i).style.color='black';
+                }else{
+                    gname("h_spractice"+i).style.color='red';
+                }
+            }
+        }
+        
+        function eval_practice_3(){
+            t=1
+            for( i=1;i<21;i++){
+                st1=gname("f_lmap"+i).value.trim();
+                st2=lmap[permutation[i-1]+1];
+                if(st1!=st2){
+                    t=0;
+                }
+            }
+            
+            if(t==1){
+                gid("pracnextButton3").style.display='block';
+                gid("praccheckButton3").style.display='none';
+                gname("prac_try3").style.display='none';
+            }else{
+                gname("prac_try3").style.display='block';
+            }
+            
+            
+        }
+        
+        function activateHints_prac3(){
+            for(i=1;i<21;i++){
+                gname("h_fpractice"+i).style.display='block';
+                st1=gname("f_lmap"+i).value.trim();
+                st2=lmap[permutation[i-1]+1];
+                if(st1==st2){
+                    gname("h_fpractice"+i).style.color='black';
+                }else{
+                    gname("h_fpractice"+i).style.color='red';
+                }
+            }
+        }
+        
+        function showtext1(){
+            gid("afterVideo1").style.display = "block";
+            gid("videoConfirm1").style.display = "none";
+        }
+        
+        function showtext2(){
+            gid("afterVideo2").style.display = "block";
+            gid("videoConfirm2").style.display = "none";
+        }
+        
+        function showLetterCode(){
+
+            for (i=1; i<21; i++){
+                gname("fh_lmap"+i).value = lmap[i];
+            }
+            if (gid("letterCodeHint").style.display == undefined || gid("letterCodeHint").style.display == "none"){
+                gname("codeHintCount").value = parseInt(gname("codeHintCount").value) + 1;
+                gid("letterCodeHint").style.display = "block"
+            }else{
+                gid("letterCodeHint").style.display = "none"
+            }
+        }
+        
+        function showInstructionsF(){
+            if (instFlag == +1){
+                gid("InsHintF").style.display = "block";
+                var sString = gname("specialStringInput").value;
+                // gid("stringHint").style.display = "block";
+                gid("stringHint").innerHTML = sString;
+                
+                // gid("stringHint").readOnly = "true";
+            }
+            if(instFlag == -1){
+                gid("InsHintF").style.display = "none";
+            }
+            instFlag = instFlag * -1;
+            
+            
+        }
+        
+        function checkSpecialString(){
+            
+            var sString = gname("specialStringInput").value;
+            if (sString == ""){
+                alert("Please enter the special string")
+                return;
+            }
+            
+            gid("specialNextButton").style.display = "block";
+            gid("spcialCheckButton").style.display = "none";
+        }
+        
+        
+        
+            </script>
+        
+        <style>
+            .pw {
+                font-family: monospace;
+                font-size: 140%;
+                font-weight: bold;
+            }
+        
+        .hint {
+            color: black;
+            border : none;
+            font-size: 100%;
+            font-weight : bold;
+        }
+        
+        .correct {
+            color: green;
+        }
+        
+        .wrong {
+            color: red;
+        }
+        
+        .buttonlink {
+            display: inline-block;
+            border-style: solid;
+            border-color: #bbb #888 #666 #aaa;
+            border-width: 3px 4px 4px 3px;
+            width: 9em;
+            height: 2em;
+            background-color: 	#FAEBD7;
+            line-height: 2;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            cursor:pointer;
+        }
+        
+        .randomLetter {
+            display: inline-block;
+            border-style: solid;
+            border-color: #bbb #888 #666 #aaa;
+            border-width: 2px 3px 3px 2px;
+            width: 6em;
+            height: 1.5 em;
+            background-color: #FFFFF0;
+            line-height: 1.5;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 200;
+            cursor:pointer;
+            font-family: "Times New Roman", Times, serif;
+            font-style: italic;
+        }
+        
+        
+        .randomLetter:hover {
+            border-color: #666 #aaa #bbb #888;
+            border-width: 4px 3px 3px 4px;
+            color: #000;
+        }
+        
+        .longButton{
+            display: inline-block;
+            border-style: solid;
+            border-color: #bbb #888 #666 #aaa;
+            border-width: 3px 4px 4px 3px;
+            width: 12em;
+            height: 2em;
+            background-color: 	#FAEBD7;
+            line-height: 2;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            cursor:pointer;
+        }
+        
+        .longButton:hover{
+            border-color: #666 #aaa #bbb #888;
+            border-width: 4px 3px 3px 4px;
+            color: #000;
+        }
+        
+        .buttonlink:hover {
+            border-color: #666 #aaa #bbb #888;
+            border-width: 4px 3px 3px 4px;
+            color: #000;
+        }
+        
+        
+        .hintbutton {
+            display: inline-block;
+            border-style: solid;
+            border-color: #bbb #888 #666 #aaa;
+            border-width: 3px 4px 4px 3px;
+            width: 11em;
+            height: 2em;
+            background-color: #DAA520;
+            line-height: 2;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            cursor:pointer;
+            float : left;
+            margin-right:10px;
+        }
+        
+        
+        table {
+            border-collapse: collapse;
+            border-spacing: 10px 50px;
+            text-align: center;
+            clear: left;
+            
+        }
+        
+        th, td{
+            padding: 2px;
+            
+        }
+        
+        input {
+            width: 50px;
+            margin: 5px;
+            font-size: 15px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            /*             border: 5px ;  */
+        }
+        
+        .firstPageTable {
+            float:left;
+            margin:1em;
+            width:300px;
+            height:300px;
+            
+        }
+        
+        .colorTableHead {
+            color:#0000FF;
+        }
+        
+        
+        input[type="text"] {
+            width: 40px;
+            height: 100%;
+            box-sizing: border-box;
+            -webkit-box-sizing:border-box;
+            -moz-box-sizing: border-box;
+            style="background-color:#FCF5D8;">
+        }
+        input[type="text2"] {
+            width: 85%;
+            height: 100%;
+            box-sizing: border-box;
+            -webkit-box-sizing:border-box;
+            -moz-box-sizing: border-box;
+            style="background-color:#FCF5D8;">
+        }
+        
+        input[type="text3"] {
+            width: 98%;
+            height: 100%;
+            box-sizing: border-box;
+            -webkit-box-sizing:border-box;
+            -moz-box-sizing: border-box;
+            style="background-color:#FCF5D8;">
+        }
+        
+        
+        .container{
+            width : 600px;
+            /* border: 2px solid #DAA520; */
+            padding: 10px;
+            margin: 5px;
+        }
+        
+        p.italic {
+            font-style: italic;
+        }
+        .instContainer{
+            /* width : 500px; */
+            width: 300px;
+            border: 2px solid #DAA520;
+            padding: 10px;
+            margin: 25px;
+        }
+        
+        
+        
+            </style>
+    </head>
+    <body>
+        
+        <div class = "container" id="welcome" style="display:block">
+            <p>Hello! Do you mind solving a couple of puzzles to warm up? </p>
+            
+            <div><h3><font color="purple">Puzzle 1</font></h2>
+                <p>Guess Sam's password for Gmail based on his passwords for Amazon and BestBuy.</p>
+                <table style="width:400px; height:80px margin-bottom: 50px;"  border="1">
+                    <tr>
+                        <th class="colorTableHead" style="color:#00008B">Website</th><td>Amazon</td><td>BestBuy</td><td>Gmail</td>
+                    </tr>
+                    <tr>
+                        <th class="colorTableHead" style="color:#00008B">Password</th><td>AmazonSam</td><td>BestBuySam</td><td><input type= "text2" placeholder="???" name="I001"><br></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="border=0"><div name = "I_hint001" class = "hint" style="display:none;">GmailSam</div></td>
+                    </tr>
+                </table>
+                </div>
+            
+            <p>
+            <div id="I0_checkButton1" style="display:block;" class="buttonlink" onclick=" I_eval_0();"><font font="">Check</font></div>
+            </p>
+            
+            <h3 name="I0_try" style="display:none ;color:red"> Try again! </h3>
+            <h3 name = "I0_correct" class="correct" style = "display:none" > Correct! </h3>
+            
+            <p>This puzzle might have reminded you of your own passwords for the websites. Do you see how easy it is for someone to impersonate you just by stealing one of your passwords?</p>
+            
+            <div><h3><font color="purple">Puzzle 2</font></h3>
+                <p>Guess Lily's password for Gmail based on her passwords for Amazon and BestBuy. </p>
+                <table style="width:400px; height:80px" border="1">
+                    <tr>
+                        <th class="colorTableHead" style="color:#00008B">Website</th><td>Amazon</td><td>BestBuy</td><td>Gmail</td>
+                        
+                    </tr>
+                    <tr>
+                        <th class="colorTableHead" style="color:#00008B">Password</th><td>qjqdrB7!</td><td>xgfyfB7!</td><td>???</td>
+                    </tr>
+                    <tr>
+                        <td style="border:none"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    
+                </table>
+            </div>
+            <br>
+            
+            <p>In this hit, we want to teach you a strategy that you can use to design passwords like the last table.</p>
+            <p>This hit will take less than <b>60 minutes</b> and we will pay you <b>$10</b>.</p>
+            <br>
+            <div id="I0_nextButton1" class="buttonlink" style="display:none" onclick="gid('warning').style.display='block'; gid('welcome').style.display = 'none';">Next</div>
+            <br>
+            
+            <!-- <div id="I0_nextButton12" class="buttonlink" style="display:block" onclick="gid('warning').style.display='block'; gid('welcome').style.display = 'none';">Next2</div> -->
+            
+            
+            
+        </div>
+        <!--------------------------------------------------------------------------------------------------------------------->
+        <div id= "warning" style="display:none">
+            
+            <br>
+            <br>
+            <br>
+            
+            <center>
+                <h3>The goal of this experiment is to try our mental algorithms to generate passwords.</h3>
+                <h3>We ask you not to take any notes during this study (notes on paper or online notes). </h3>
+                <h3>Only use what you see on the screen to answer the questions.</h3>
+            </center>
+            
+            <br>
+            <br>
+            <center>
+                
+                <div id="warning_nextButton" class="buttonlink" style="display:block" onclick="gid('instructions').style.display='block'; gid('warning').style.display = 'none';tick()">Agree</div>
+                </div>
+        <!--------------------------------------------------------------------------------------------------------------------->
+        
+        <div  class="container" id="instructions" style="display:none;">
+            
+            <h1>Instructions</h1>
+            
+            
+            <p>In this hit we want to teach you a new strategy for designing secure passwords.
+            The following video describes this strategy.</p>
+            
+            <h3>
+                <iframe width="500" height="280" src="https://www.youtube.com/embed/DlPIy3WaAH4" frameborder="0" allowfullscreen></iframe>
+            </h3>
+            
+            
+            
+            
+            <div id="videoConfirm1" style="display:block;" class="longButton" onclick="showtext1();"><font font="">I learned the method! </font></div>
+            
+            <div id="afterVideo1" style="display:none">
+                
+                <p>Let's practice this method and generate a couple of passwords!</p>
+                
+                <table border="1">
+                    <tr>
+                        <th>Letter Code</th>
+                        <th>Sepcial String</th>
+                    </tr>
+                    <tr>
+                        <!--<td><img src="letterCode.png" alt="Letter Code" style="width:400px;height:70px;"></td> -->
+                        <td><img src="http://i.imgur.com/3TsFdDZ.png" alt="Letter Code" style="width:400px;height:70px;"></td>
+                        <td>B7!</td>
+                    </tr>
+                </table>
+                <ul>
+                    <li><font color="red"> If the website name has the letters u, v, w, x, y, z, just skip that letter.</font></li>
+                </ul>
+                
+                
+                <table class="pw" border="1" align="center">
+                    <tr class="colorTableHead" style="color:#00008B"><td>Website</td><td>Password</td>
+                        <td></td>
+                    </tr>
+                    <tr><td>amazon</td>
+                        <td><input name="I100" type="text2" size="10"></td>
+                        <td> <div id = "I_hint100" class = "hint" style="display:none;"> </div> </td>
+                    </tr>
+                    <tr><td>wikipedia</td>
+                        <td><input name="I101" type="text2" size="10"></td>
+                        <td> <div id = "I_hint101" class = "hint" style="display:none;"> </div></td>
+                    </tr>
+                </table>
+                
+                <br>
+                <div id="I1_checkButton" style="display:block;" class="buttonlink" onclick="I_eval_1();">Check</div>
+                <h3 name="I1_try" style="display:none ;color:red"> Try again! </h3>
+                <h3 name = "I1_correct" class="correct" style = "display:none; color:green";> Correct! </h3>
+                
+                <div class="instContainer" id="amazonhint" style="display:none">
+                    <ul>
+                        <li> <font color=red><b>a</b></font> goes to <font color=red><b>q</b></font>.</li>
+                        
+                        <li><font color=red><b>m</b></font> goes to <font color=red><b>j</b></font>. </li>
+                        
+                        <li><font color=red><b>a</b></font> goes to <font color=red><b>q</b></font>. </li>
+                        
+                        <li><font color=red><b>z</b></font> does not appear in our word sequence.
+                            So we will skip it.</li>
+                        
+                        <li><font color=red><b>o</b></font> goes to <font color=red><b>d</b></font>.</li>
+                        
+                        <li><font color=red><b>n</b></font> goes to <font color=red><b>r</b></font>.</li>
+                        
+                        <li>Add the string <font color=red><b>B7!</b></font> to the end of your password.</li>
+                    </ul>
+                </div>
+                
+            </div> <!-- End of PostVideo -->
+            
+            <div id="ending" style="display:none"> Great! You just learned how to make a new set of passwords using a letter code. In the next page, we ask you to make a letter code of your own and we teach you how to memorize it!
+                <br>
+                <br>
+                <div id="I1_nextButton" style="display:none" class="buttonlink" onclick="gname('instruction1_time').value = tock(); gid('instructions').style.display = 'none'; gid('mapping').style.display = 'block'; tick();">Next</div>
+                <br>
+            </div> <!--  End of ending -->
+            
+            
+            
+            <!-- <div id="nextButton5676" class="buttonlink" style = "display:block" onclick="gid('mapping').style.display='block'; gid('instructions').style.display = 'none';">Next2</div> -->
+        </div>
+        
+        <!--------------------------------------------------------------------------------------------------------------------->
+        
+        
+        <div id="mapping" style="display:none;">
+            <h1>Generate your own letrter code.</h1>
+            <p> Press the <i>Random letter</i> button in front of each letter to get a random letter.</p>
+            
+            
+            <div style="float:left;margin: 5px" ><table border="1" class="pw" >
+                <tr><td>a</td><td><input name="map1" type="text" readOnly=true ></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(1)">Random letter</div> </td>
+                </tr>
+                <tr><td>b</td><td><input name="map2" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(2)">Random letter</div> </td>
+                </tr>
+                <tr><td>c</td><td><input name="map3" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(3)">Random letter</div> </td>
+                </tr>
+                <tr><td>d</td><td><input name="map4" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(4)">Random letter</div> </td>
+                </tr>
+                <tr><td>e</td><td><input name="map5" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(5)">Random letter</div> </td>
+                </tr>
+                <tr><td>f</td><td><input name="map6" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(6)">Random letter</div> </td>
+                </tr>
+                <tr><td>g</td><td><input name="map7" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(7)">Random letter</div> </td>
+                </tr>
+                <tr><td>h</td><td><input name="map8" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(8)">Random letter</div> </td>
+                </tr>
+                <tr><td>i</td><td><input name="map9" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(9)">Random letter</div> </td>
+                </tr>
+                <tr><td>j</td><td><input name="map10" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(10)">Random letter</div> </td>
+                </tr>
+            </table></div>
+            <div style="float:left;margin: 5px" ><table border="1" class="pw" >
+                <tr><td>k</td><td><input name="map11" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(11)">Random letter</div> </td>
+                </tr>
+                <tr><td>l</td><td><input name="map12" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(12)">Random letter</div> </td>
+                </tr>
+                <tr><td>m</td><td><input name="map13" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(13)">Random letter</div> </td>
+                </tr>
+                <tr><td>n</td><td><input name="map14" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(14)">Random letter</div> </td>
+                </tr>
+                <tr><td>o</td><td><input name="map15" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(15)">Random letter</div> </td>
+                </tr>
+                <tr><td>p</td><td><input name="map16" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(16)">Random letter</div> </td>
+                </tr>
+                <tr><td>q</td><td><input name="map17" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(17)">Random letter</div> </td>
+                </tr>
+                <tr><td>r</td><td><input name="map18" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(18)">Random letter</div> </td>
+                </tr>
+                <tr><td>s</td><td><input name="map19" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(19)">Random letter</div> </td>
+                </tr>
+                <tr><td>t</td><td><input name="map20" type="text" readOnly=true></td>
+                    <td> <div id="nextButton1" class="randomLetter" style = "display:block" onclick="assign_rand_letter(20)">Random letter</div> </td>
+                </tr>
+            </table></div>
+            
+            
+            <div style="clear:left"></div>
+            <br>
+            <div id="MapCheckButton" style="display:block" class="buttonlink" onclick="is_map_full();"><font font="">Check</font></div>
+            
+            <h3 name="map_not_full" style="display:none ;color:red"> Letter code is not complete! </h3>
+            
+            <!-- <div id="mapEnding" style="display:none"> You just generated your own letter code. In the next page we teach you a trick to memorize such a letter code!</div> -->
+            
+            <div id="MapNextButton" class="buttonlink" style = "display:none" onclick="gname('mapping_t').value = tock(); gid('words').style.display='block'; gid('mapping').style.display = 'none';tick();">Next</div>
+            <br>
+            
+            <!-- <div id="nextButton577" class="buttonlink" style = "display:block" onclick="gid('words').style.display='block'; gid('mapping').style.display = 'none';">Next2</div> -->
+            
+        </div>
+        
+        <!------------------------------------------------------------------------------------------------------------------------------------------------------>
+        <div id="words" class="container" style="display:none;">
+            <h1>Memorization trick!</h1>
+            
+            <p>In the last page, you generated a letter code of your own. Here, we teach you a trick for memorizing such a code.</p>
+            
+            <h3>
+                <iframe width="500" height="280" src="https://www.youtube.com/embed/yd88MFZttvQ" frameborder="0" allowfullscreen></iframe>
+            </h3>
+            
+            <div id="videoConfirm2" style="display:block;" class="longButton" onclick="showtext2();"><font font="">I learned the method! </font></div>
+            
+            <div id="afterVideo2" style="display:none">
+                <ul>
+                    <li>Now apply this method to your own letter code.</li>
+                    
+                    <li> <b>Read each row and write down the first word that comes to your mind that starts
+                        with the left letter and has the right letter as the next consonant.</b></li>
+                    
+                    <li> You will use these words in the next steps of memorization, so be careful about typos.</li>
+                </ul>
+                
+                <table>
+                    <tr>
+                        <td>
+                <div style="float:left;margin: 5px" ><table border="1" class="pw" >
+                    <tr><td>a</td><td><input name="wmap1" type="text" readOnly=true ></td>
+                        <td> <input name="word1" type="text2" > </td>
+                    </tr>
+                    <tr><td>b</td><td><input name="wmap2" type="text" readOnly=true></td>
+                        <td>  <input name="word2" type="text2" >  </td>
+                    </tr>
+                    <tr><td>c</td><td><input name="wmap3" type="text" readOnly=true></td>
+                        <td> <input name="word3" type="text2" > </td>
+                    </tr>
+                    <tr><td>d</td><td><input name="wmap4" type="text" readOnly=true></td>
+                        <td>  <input name="word4" type="text2" >  </td>
+                    </tr>
+                    <tr><td>e</td><td><input name="wmap5" type="text" readOnly=true></td>
+                        <td>  <input name="word5" type="text2"  >  </td>
+                    </tr>
+                    <tr><td>f</td><td><input name="wmap6" type="text" readOnly=true></td>
+                        <td>  <input name="word6" type="text2" >  </td>
+                    </tr>
+                    <tr><td>g</td><td><input name="wmap7" type="text" readOnly=true></td>
+                        <td>  <input name="word7" type="text2"  >  </td>
+                    </tr>
+                    <tr><td>h</td><td><input name="wmap8" type="text" readOnly=true></td>
+                        <td>  <input name="word8" type="text2" >  </td>
+                    </tr>
+                    <tr><td>i</td><td><input name="wmap9" type="text" readOnly=true></td>
+                        <td>  <input name="word9" type="text2" >  </td>
+                    </tr>
+                    <tr><td>j</td><td><input name="wmap10" type="text" readOnly=true></td>
+                        <td>  <input name="word10" type="text2" >  </td>
+                    </tr>
+                </table></div>
+                </td>
+                        
+                <td>
+                <div style="float:left;margin: 5px" ><table border="1" class="pw" >
+                    <tr><td>k</td><td><input name="wmap11" type="text" readOnly=true></td>
+                        <td>  <input name="word11" type="text2" >  </td>
+                    </tr>
+                    <tr><td>l</td><td><input name="wmap12" type="text" readOnly=true></td>
+                        <td>  <input name="word12" type="text2" >  </td>
+                    </tr>
+                    <tr><td>m</td><td><input name="wmap13" type="text" readOnly=true></td>
+                        <td>  <input name="word13" type="text2" >  </td>
+                    </tr>
+                    <tr><td>n</td><td><input name="wmap14" type="text" readOnly=true></td>
+                        <td>  <input name="word14" type="text2" >  </td>
+                    </tr>
+                    <tr><td>o</td><td><input name="wmap15" type="text" readOnly=true></td>
+                        <td>  <input name="word15" type="text2" >  </td>
+                    </tr>
+                    <tr><td>p</td><td><input name="wmap16" type="text" readOnly=true></td>
+                        <td>  <input name="word16" type="text2" >  </td>
+                    </tr>
+                    <tr><td>q</td><td><input name="wmap17" type="text" readOnly=true></td>
+                        <td>  <input name="word17" type="text2" >  </td>
+                    </tr>
+                    <tr><td>r</td><td><input name="wmap18" type="text" readOnly=true></td>
+                        <td>  <input name="word18" type="text2" >  </td>
+                    </tr>
+                    <tr><td>s</td><td><input name="wmap19" type="text" readOnly=true></td>
+                        <td>  <input name="word19" type="text2" >  </td>
+                    </tr>
+                    <tr><td>t</td><td><input name="wmap20" type="text" readOnly=true></td>
+                        <td>  <input name="word20" type="text2" >  </td>
+                    </tr>
+                </table></div>
+                </td>
+                </tr>
+                    </table>
+                
+                <div style="clear:left"></div>
+                
+                <br>
+                <div id="WordsCheckButton" style="display:block" class="buttonlink" onclick="is_words_full();"><font font="">Check</font></div>
+                
+                <h2 name="words_not_full" style="display:none ;color:red"> Some words are missing! </h2>
+                
+                <div id="WordsNextButton" class="buttonlink" style = "display:none" onclick="gname('words_t').value = tock(); gid('secondpractice').style.display='block'; gid('words').style.display = 'none';tick();">Next</div>
+                <br>
+                
+            </div> <!-- End of afterVideo2 -->
+            
+            <!-- <div id="nextButton12" class="buttonlink" style = "display:block" onclick="gname('practice_1').value = tock(); gid('secondpractice').style.display='block'; gid('firstpractice').style.display = 'none';tick();">Next2</div> -->
+            
+            <!-- <div id="nextButton577" class="buttonlink" style = "display:block" onclick="gid('memorization1').style.display='block'; gid('words').style.display = 'none';">Next2</div> -->
+        </div>
+        
+        
+        <!------------------------------------------------------------------------------------------------------------------------------->
+        
+        <div id="memorization1" style="display:none">
+            <h1>Memorization (1/5)</h1>
+            
+            <ul>
+                <li> <b>Read each row</b> and </li>
+                <li> <b>Type the elements of each row separated by a space in the last column.</b></li>
+            </ul>
+            
+            <table align="center" border="1" class="pw">
+                <tr><td>a</td><td><input name="1_lmap1" type="text" readOnly=true ></td><td><input name="1_wmap1" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap1" type="text3" ></td>
+                    <td> <div name = "h_memorization1" class = "hint" style="display:none;">a q aqua</div> </td>
+                </tr>
+                <tr><td>b</td><td><input name="1_lmap2" type="text" readOnly=true ></td><td><input name="1_wmap2" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap2" type="text3" ></td>
+                    <td> <div name = "h_memorization2" class = "hint" style="display:none;">b f beef</div> </td>
+                </tr>
+                <tr><td>c</td><td><input name="1_lmap3" type="text" readOnly=true ></td><td><input name="1_wmap3" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap3" type="text3" ></td>
+                    <td> <div name = "h_memorization3" class = "hint" style="display:none;">c h chair</div> </td>
+                </tr>
+                <tr><td>d</td><td><input name="1_lmap4" type="text" readOnly=true ></td><td><input name="1_wmap4" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap4" type="text3" ></td>
+                    <td> <div name = "h_memorization4" class = "hint" style="display:none;">d c duck</div> </td>
+                </tr>
+                <tr><td>e</td><td><input name="1_lmap5" type="text" readOnly=true ></td><td><input name="1_wmap5" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap5" type="text3" ></td>
+                    <td> <div name = "h_memorization5" class = "hint" style="display:none;">e g egg</div> </td>
+                </tr>
+                <tr><td>f</td><td><input name="1_lmap6" type="text" readOnly=true ></td><td><input name="1_wmap6" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap6" type="text3" ></td>
+                    <td> <div name = "h_memorization6" class = "hint" style="display:none;">f b fabulous</div> </td>
+                </tr>
+                <tr><td>g</td><td><input name="1_lmap7" type="text" readOnly=true ></td><td><input name="1_wmap7" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap7" type="text3" ></td>
+                    <td> <div name = "h_memorization7" class = "hint" style="display:none;">g s gas</div> </td>
+                </tr>
+                <tr><td>h</td><td><input name="1_lmap8" type="text" readOnly=true ></td><td><input name="1_wmap8" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap8" type="text3" ></td>
+                    <td> <div name = "h_memorization8" class = "hint" style="display:none;">h k hike</div> </td>
+                </tr>
+                <tr><td>i</td><td><input name="1_lmap9" type="text" readOnly=true ></td><td><input name="1_wmap9" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap9" type="text3" ></td>
+                    <td> <div name = "h_memorization9" class = "hint" style="display:none;">i l ill</div> </td>
+                </tr>
+                <tr><td>j</td><td><input name="1_lmap10" type="text" readOnly=true ></td><td><input name="1_wmap10" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap10" type="text3" ></td>
+                    <td> <div name = "h_memorization10" class = "hint" style="display:none;">j m jam</div> </td>
+                </tr>
+            </table>
+            
+            <br>
+            <div id="memcheckButton1" style="display:block" class="buttonlink" onclick="eval_memorization1();
+                activatehint_memorization1(); "><font font="">Check</font></div>
+            
+            <h2 name="memorization_try1" style="display:none ;color:red"> Try again! </h2>
+            
+            <div id="memnextButton1" class="buttonlink" style = "display:none" onclick="gname('memorization1_t').value = tock(); gid('memorization2').style.display='block'; gid('memorization1').style.display = 'none';tick();">Next</div>
+            <br>
+            <!-- <div id="nextButton62" class="buttonlink" style = "display:block" onclick="gid('memorization2').style.display='block'; gid('memorization1').style.display = 'none';">Next2</div> -->
+            
+        </div>
+        
+        <!---------------------------------------------------------------------------------------------------------------------------------------->
+        <div id="memorization2" style="display:none">
+            <h1>Memorization (2/5)</h1>
+            <p>
+            Do the same for the second 10 letters of the alphabet.
+            </p>
+            
+            <ul>
+                <li><b>Read each row and </b></li>
+                <li><b>Type the elements of each row separated by a space in the last column. </b></li>
+                
+            </ul>
+            
+            <table align="center" border="1" class="pw">
+                <tr><td>k</td><td><input name="1_lmap11" type="text" readOnly=true ></td><td><input name="1_wmap11" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap11" type="text3" ></td>
+                    <td> <div name = "h_memorization11" class = "hint" style="display:none;">a q aqua</div> </td>
+                </tr>
+                <tr><td>l</td><td><input name="1_lmap12" type="text" readOnly=true ></td><td><input name="1_wmap12" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap12" type="text3" ></td>
+                    <td> <div name = "h_memorization12" class = "hint" style="display:none;">b f beef</div> </td>
+                </tr>
+                <tr><td>m</td><td><input name="1_lmap13" type="text" readOnly=true ></td><td><input name="1_wmap13" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap13" type="text3" ></td>
+                    <td> <div name = "h_memorization13" class = "hint" style="display:none;">c h chair</div> </td>
+                </tr>
+                <tr><td>n</td><td><input name="1_lmap14" type="text" readOnly=true ></td><td><input name="1_wmap14" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap14" type="text3" ></td>
+                    <td> <div name = "h_memorization14" class = "hint" style="display:none;">d c duck</div> </td>
+                </tr>
+                <tr><td>o</td><td><input name="1_lmap15" type="text" readOnly=true ></td><td><input name="1_wmap15" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap15" type="text3" ></td>
+                    <td> <div name = "h_memorization15" class = "hint" style="display:none;">e g egg</div> </td>
+                </tr>
+                <tr><td>p</td><td><input name="1_lmap16" type="text" readOnly=true ></td><td><input name="1_wmap16" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap16" type="text3" ></td>
+                    <td> <div name = "h_memorization16" class = "hint" style="display:none;">f b fabulous</div> </td>
+                </tr>
+                <tr><td>q</td><td><input name="1_lmap17" type="text" readOnly=true ></td><td><input name="1_wmap17" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap17" type="text3" ></td>
+                    <td> <div name = "h_memorization17" class = "hint" style="display:none;">g s gas</div> </td>
+                </tr>
+                <tr><td>r</td><td><input name="1_lmap18" type="text" readOnly=true ></td><td><input name="1_wmap18" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap18" type="text3" ></td>
+                    <td> <div name = "h_memorization18" class = "hint" style="display:none;">h k hike</div> </td>
+                </tr>
+                <tr><td>s</td><td><input name="1_lmap19" type="text" readOnly=true ></td><td><input name="1_wmap19" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap19" type="text3" ></td>
+                    <td> <div name = "h_memorization19" class = "hint" style="display:none;">i l ill</div> </td>
+                </tr>
+                <tr><td>t</td><td><input name="1_lmap20" type="text" readOnly=true ></td><td><input name="1_wmap20" type="text2" readOnly=true ></td>
+                    <td><input name="1_lwmap20" type="text3" ></td>
+                    <td> <div name = "h_memorization20" class = "hint" style="display:none;">j m jam</div> </td>
+                </tr>
+            </table>
+            
+            
+            <script>set_memorization2();</script>
+            
+            
+            <br>
+            <div id="memcheckButton2" style="display:block" class="buttonlink" onclick="eval_memorization2();
+                activatehint_memorization2(); "><font font="">Check</font></div>
+            
+            <h2 name="memorization_try2" style="display:none ;color:red"> Try again! </h2>
+            
+            
+            <div id="memnextButton2" class="buttonlink" style = "display:none" onclick="gname('memorization2_t').value = tock(); gid('memorization2').style.display='none'; gid('firstpractice').style.display = 'block';tick();set_practice();">Next</div>
+            
+            <!-- <div id="nextButton62" class="buttonlink" style = "display:block" onclick="gid('firstpractice').style.display='block'; gid('memorization2').style.display = 'none';set_practice();">Next2</div> -->
+            
+        </div>
+        
+        <!------------------------------------------------------------------------------------------------------------------------------------------------>
+        
+        <div id="firstpractice" style="display:none;">
+            <h1>Memorization (3/5)</h1>
+            
+            
+            <p>Now let’s practice your memory! For these tables</p>
+            <ul>
+                <li> <b> Look at the two letters of each row and fill out the missing word </b>
+                </li>
+                <!-- <li><span class="pw"> Remember the rule: the word starts with the left letter and has the middle letter as the next consonant. -->
+                
+                </li>
+            </ul>
+            
+            
+            <table align="center" border="1" class="pw">
+                
+            </table>
+            
+            
+            <div style="float:left;margin: 5px" ><table border="1" class="pw" >
+                <tr><td>a</td><td><input name="2_lmap1" type="text" readOnly=true ></td><td><input name="2_wmap1" type="text2" ></td>
+                    <td> <div name = "h_practice1" class = "hint" style="display:none;">a q aqua</div> </td>
+                </tr>
+                <tr><td>b</td><td><input name="2_lmap2" type="text" readOnly=true ></td><td><input name="2_wmap2" type="text2" ></td>
+                    <td> <div name = "h_practice2" class = "hint" style="display:none;">b f beef</div> </td>
+                </tr>
+                <tr><td>c</td><td><input name="2_lmap3" type="text" readOnly=true ></td><td><input name="2_wmap3" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice3" class = "hint" style="display:none;">c h chair</div> </td>
+                </tr>
+                <tr><td>d</td><td><input name="2_lmap4" type="text" readOnly=true ></td><td><input name="2_wmap4" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice4" class = "hint" style="display:none;">d c duck</div> </td>
+                </tr>
+                <tr><td>e</td><td><input name="2_lmap5" type="text" readOnly=true ></td><td><input name="2_wmap5" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice5" class = "hint" style="display:none;">e g egg</div> </td>
+                </tr>
+                <tr><td>f</td><td><input name="2_lmap6" type="text" readOnly=true ></td><td><input name="2_wmap6" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice6" class = "hint" style="display:none;">f b fabulous</div> </td>
+                </tr>
+                <tr><td>g</td><td><input name="2_lmap7" type="text" readOnly=true ></td><td><input name="2_wmap7" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice7" class = "hint" style="display:none;">g s gas</div> </td>
+                </tr>
+                <tr><td>h</td><td><input name="2_lmap8" type="text" readOnly=true ></td><td><input name="2_wmap8" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice8" class = "hint" style="display:none;">h k hike</div> </td>
+                </tr>
+                <tr><td>i</td><td><input name="2_lmap9" type="text" readOnly=true ></td><td><input name="2_wmap9" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice9" class = "hint" style="display:none;">i l ill</div> </td>
+                </tr>
+                <tr><td>j</td><td><input name="2_lmap10" type="text" readOnly=true ></td><td><input name="2_wmap10" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice10" class = "hint" style="display:none;">j m jam</div> </td>
+                </tr>
+            </table></div>
+            <div  style="float:left;margin: 5px"><table border="1" class="pw">
+                <tr><td>k</td><td><input name="2_lmap11" type="text" readOnly=true ></td><td><input name="2_wmap11" type="text2" ></td>
+                    <td> <div name = "h_practice11" class = "hint" style="display:none;">a q aqua</div> </td>
+                </tr>
+                <tr><td>l</td><td><input name="2_lmap12" type="text" readOnly=true ></td><td><input name="2_wmap12" type="text2" ></td>
+                    <td> <div name = "h_practice12" class = "hint" style="display:none;">b f beef</div> </td>
+                </tr>
+                <tr><td>m</td><td><input name="2_lmap13" type="text" readOnly=true ></td><td><input name="2_wmap13" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice13" class = "hint" style="display:none;">c h chair</div> </td>
+                </tr>
+                <tr><td>n</td><td><input name="2_lmap14" type="text" readOnly=true ></td><td><input name="2_wmap14" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice14" class = "hint" style="display:none;">d c duck</div> </td>
+                </tr>
+                <tr><td>o</td><td><input name="2_lmap15" type="text" readOnly=true ></td><td><input name="2_wmap15" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice15" class = "hint" style="display:none;">e g egg</div> </td>
+                </tr>
+                <tr><td>p</td><td><input name="2_lmap16" type="text" readOnly=true ></td><td><input name="2_wmap16" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice16" class = "hint" style="display:none;">f b fabulous</div> </td>
+                </tr>
+                <tr><td>q</td><td><input name="2_lmap17" type="text" readOnly=true ></td><td><input name="2_wmap17" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice17" class = "hint" style="display:none;">g s gas</div> </td>
+                </tr>
+                <tr><td>r</td><td><input name="2_lmap18" type="text" readOnly=true ></td><td><input name="2_wmap18" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice18" class = "hint" style="display:none;">h k hike</div> </td>
+                </tr>
+                <tr><td>s</td><td><input name="2_lmap19" type="text" readOnly=true ></td><td><input name="2_wmap19" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice19" class = "hint" style="display:none;">i l ill</div> </td>
+                </tr>
+                <tr><td>t</td><td><input name="2_lmap20" type="text" readOnly=true ></td><td><input name="2_wmap20" type="text2"  ></td>
+                    
+                    <td> <div name = "h_practice20" class = "hint" style="display:none;">j m jam</div> </td>
+                </tr>
+            </table></div>
+            <div style="clear:left"></div>
+            
+            
+            <br>
+            <div id="praccheckButton1" style="display:block" class="buttonlink" onclick="eval_practice_1();
+                activateHints_prac1(); "><font font="">Check</font></div>
+            
+            <h2 name="prac_try1" style="display:none ;color:red"> Try again! </h2>
+            
+            <div id="pracnextButton1" class="buttonlink" style = "display:none" onclick="gname('practice1_t').value = tock(); gid('secondpractice').style.display='block'; gid('firstpractice').style.display = 'none';tick();">Next</div>
+            
+            
+            <!-- <div id="nextButton12" class="buttonlink" style = "display:block" onclick="gname('practice_1').value = tock(); gid('secondpractice').style.display='block'; gid('firstpractice').style.display = 'none';tick();">Next2</div> -->
+            
+        </div>
+        
+        <!------------------------------------------------------------------------------------------------------------------------------------->
+        <div id="secondpractice" style="display:none;">
+            <h1>Memorization (4/5)</h1>
+            
+            
+            <p>Awesome! We are one step away from completing the memorization task</p>
+            <ul>
+                <li> Look at the left letter in each row, remember the word, type the letter code.</li>
+            </ul>
+            
+            <table align="center" border="1" class="pw">
+            </table>
+            
+            
+            <div style="float:left;margin: 5px" ><table border="1" class="pw" >
+                
+                <tr><td>a</td><td><input name="3_lmap1" type="text" ></td>
+                    <td><div name = "h_spractice1" class = "hint" style="display:none;">a q aqua</div></td>
+                </tr>
+                
+                <tr><td>b</td><td><input name="3_lmap2" type="text" ></td>
+                    <td><div name = "h_spractice2" class = "hint" style="display:none;">b f beef</div></td>
+                </tr>
+                
+                <tr><td>c</td><td><input name="3_lmap3" type="text"  ></td>
+                    <td> <div name = "h_spractice3" class = "hint" style="display:none;">c h chair</div></td>
+                </tr>
+                
+                <tr><td>d</td><td><input name="3_lmap4" type="text"  ></td>
+                    <td> <div name = "h_spractice4" class = "hint" style="display:none;">d c duck</div> </td>
+                </tr>
+                
+                <tr><td>e</td><td><input name="3_lmap5" type="text"  ></td>
+                    <td> <div name = "h_spractice5" class = "hint" style="display:none;">e g egg</div> </td>
+                </tr>
+                
+                <tr><td>f</td><td><input name="3_lmap6" type="text"  ></td>
+                    <td> <div name = "h_spractice6" class = "hint" style="display:none;">f b fabulous</div> </td>
+                </tr>
+                
+                <tr><td>g</td><td><input name="3_lmap7" type="text"  ></td>
+                    <td> <div name = "h_spractice7" class = "hint" style="display:none;">g s gas</div> </td>
+                </tr>
+                
+                <tr><td>h</td><td><input name="3_lmap8" type="text"  ></td>
+                    <td> <div name = "h_spractice8" class = "hint" style="display:none;">h k hike</div> </td>
+                </tr>
+                
+                <tr><td>i</td><td><input name="3_lmap9" type="text"  ></td>
+                    <td> <div name = "h_spractice9" class = "hint" style="display:none;">i l ill</div> </td>
+                </tr>
+                
+                <tr><td>j</td><td><input name="3_lmap10" type="text"  ></td>
+                    <td> <div name = "h_spractice10" class = "hint" style="display:none;">j m jam</div> </td>
+                </tr>
+                
+            </table></div>
+            <div  style="float:left;margin: 5px"><table border="1" class="pw">
+                
+                <tr><td>k</td><td><input name="3_lmap11" type="text" ></td>
+                    <td> <div name = "h_spractice11" class = "hint" style="display:none;">a q aqua</div> </td>
+                </tr>
+                
+                <tr><td>l</td><td><input name="3_lmap12" type="text" ></td>
+                    <td> <div name = "h_spractice12" class = "hint" style="display:none;">b f beef</div> </td>
+                </tr>
+                
+                <tr><td>m</td><td><input name="3_lmap13" type="text"  ></td>
+                    <td> <div name = "h_spractice13" class = "hint" style="display:none;">c h chair</div> </td>
+                </tr>
+                
+                <tr><td>n</td><td><input name="3_lmap14" type="text"  ></td>
+                    <td> <div name = "h_spractice14" class = "hint" style="display:none;">d c duck</div> </td>
+                </tr>
+                
+                <tr><td>o</td><td><input name="3_lmap15" type="text"  ></td>
+                    <td> <div name = "h_spractice15" class = "hint" style="display:none;">e g egg</div> </td>
+                </tr>
+                
+                <tr><td>p</td><td><input name="3_lmap16" type="text"  ></td>
+                    <td> <div name = "h_spractice16" class = "hint" style="display:none;">f b fabulous</div> </td>
+                </tr>
+                
+                <tr><td>q</td><td><input name="3_lmap17" type="text"  ></td>
+                    <td> <div name = "h_spractice17" class = "hint" style="display:none;">g s gas</div> </td>
+                </tr>
+                
+                <tr><td>r</td><td><input name="3_lmap18" type="text"  ></td>
+                    <td> <div name = "h_spractice18" class = "hint" style="display:none;">h k hike</div> </td>
+                </tr>
+                
+                <tr><td>s</td><td><input name="3_lmap19" type="text"  ></td>
+                    <td> <div name = "h_spractice19" class = "hint" style="display:none;">i l ill</div> </td>
+                </tr>
+                
+                <tr><td>t</td><td><input name="3_lmap20" type="text"  ></td>
+                    <td> <div name = "h_spractice20" class = "hint" style="display:none;">j m jam</div> </td>
+                </tr>
+                
+            </table></div>
+            <div style="clear:left"></div>
+            <br>
+            
+            <div id="praccheckButton2" style="display:block" class="buttonlink" onclick="eval_practice_2();
+                activateHints_prac2(); "><font font="">Check</font></div>
+            
+            <h2 name="prac_try2" style="display:none ;color:red"> Try again! </h2>
+            
+            <div id="pracnextButton2" class="buttonlink" style = "display:none" onclick="gname('practice2_t').value = tock(); gid('thirdpractice').style.display='block'; gid('secondpractice').style.display = 'none';tick();">Next</div>
+            
+            <br>
+            <!-- <div id="nextButton12" class="buttonlink" style = "display:block" onclick="gname('practice_2').value = tock();
+                gid('thirdpractice').style.display='block'; gid('secondpractice').style.display = 'none';tick();">Next2</div> -->
+            
+        </div>
+        
+        <!---------------------------------------------------------------------------------------------------------------------------------------------->
+        <div id="thirdpractice" style="display:none;">
+            <h1>Memorization (5/5)</h1>
+            
+            <ul>
+                <li>Done! You have memorized a letter to letter map! Let’s practice once and we are ready to go. Type in the missing letters.</li>
+            </ul>
+            
+            <table align="center" border="1" class="pw">
+            </table>
+            
+            
+            <div style="float:left;margin: 5px" ><table border="1" class="pw" >
+                
+                <tr><td>o</td><td><input name="f_lmap1" type="text" ></td>
+                    <td><div name = "h_fpractice1" class = "hint" style="display:none;">a q aqua</div></td>
+                </tr>
+                
+                <tr><td>b</td><td><input name="f_lmap2" type="text" ></td>
+                    <td><div name = "h_fpractice2" class = "hint" style="display:none;">b f beef</div></td>
+                </tr>
+                
+                <tr><td>p</td><td><input name="f_lmap3" type="text"  ></td>
+                    <td> <div name = "h_fpractice3" class = "hint" style="display:none;">c h chair</div></td>
+                </tr>
+                
+                <tr><td>d</td><td><input name="f_lmap4" type="text"  ></td>
+                    <td> <div name = "h_fpractice4" class = "hint" style="display:none;">d c duck</div> </td>
+                </tr>
+                
+                <tr><td>s</td><td><input name="f_lmap5" type="text"  ></td>
+                    <td> <div name = "h_fpractice5" class = "hint" style="display:none;">e g egg</div> </td>
+                </tr>
+                
+                <tr><td>k</td><td><input name="f_lmap6" type="text"  ></td>
+                    <td> <div name = "h_fpractice6" class = "hint" style="display:none;">f b fabulous</div> </td>
+                </tr>
+                
+                <tr><td>g</td><td><input name="f_lmap7" type="text"  ></td>
+                    <td> <div name = "h_fpractice7" class = "hint" style="display:none;">g s gas</div> </td>
+                </tr>
+                
+                <tr><td>h</td><td><input name="f_lmap8" type="text"  ></td>
+                    <td> <div name = "h_fpractice8" class = "hint" style="display:none;">h k hike</div> </td>
+                </tr>
+                
+                <tr><td>m</td><td><input name="f_lmap9" type="text"  ></td>
+                    <td> <div name = "h_fpractice9" class = "hint" style="display:none;">i l ill</div> </td>
+                </tr>
+                
+                <tr><td>t</td><td><input name="f_lmap10" type="text"  ></td>
+                    <td> <div name = "h_fpractice10" class = "hint" style="display:none;">j m jam</div> </td>
+                </tr>
+                
+            </table></div>
+            <div  style="float:left;margin: 5px"><table border="1" class="pw">
+                
+                <tr><td>f</td><td><input name="f_lmap11" type="text" ></td>
+                    <td> <div name = "h_fpractice11" class = "hint" style="display:none;">a q aqua</div> </td>
+                </tr>
+                
+                <tr><td>l</td><td><input name="f_lmap12" type="text" ></td>
+                    <td> <div name = "h_fpractice12" class = "hint" style="display:none;">b f beef</div> </td>
+                </tr>
+                
+                <tr><td>i</td><td><input name="f_lmap13" type="text"  ></td>
+                    <td> <div name = "h_fpractice13" class = "hint" style="display:none;">c h chair</div> </td>
+                </tr>
+                
+                <tr><td>n</td><td><input name="f_lmap14" type="text"  ></td>
+                    <td> <div name = "h_fpractice14" class = "hint" style="display:none;">d c duck</div> </td>
+                </tr>
+                
+                <tr><td>a</td><td><input name="f_lmap15" type="text"  ></td>
+                    <td> <div name = "h_fpractice15" class = "hint" style="display:none;">e g egg</div> </td>
+                </tr>
+                
+                <tr><td>c</td><td><input name="f_lmap16" type="text"  ></td>
+                    <td> <div name = "h_fpractice16" class = "hint" style="display:none;">f b fabulous</div> </td>
+                </tr>
+                
+                <tr><td>q</td><td><input name="f_lmap17" type="text"  ></td>
+                    <td> <div name = "h_fpractice17" class = "hint" style="display:none;">g s gas</div> </td>
+                </tr>
+                
+                <tr><td>r</td><td><input name="f_lmap18" type="text"  ></td>
+                    <td> <div name = "h_fpractice18" class = "hint" style="display:none;">h k hike</div> </td>
+                </tr>
+                
+                <tr><td>e</td><td><input name="f_lmap19" type="text"  ></td>
+                    <td> <div name = "h_fpractice19" class = "hint" style="display:none;">i l ill</div> </td>
+                </tr>
+                
+                <tr><td>j</td><td><input name="f_lmap20" type="text"  ></td>
+                    <td> <div name = "h_fpractice20" class = "hint" style="display:none;">j m jam</div> </td>
+                </tr>
+                
+            </table></div>
+            <div style="clear:left" ></div>
+            <br>
+            <h2 name="prac_try3" style="display:none ;color:red"> Try again! </h2>
+            
+            <div id="praccheckButton3" style="display:block" class="buttonlink" onclick="eval_practice_3();
+                activateHints_prac3(); "><font font="">Check</font></div>
+            
+            <div id="pracnextButton3" class="buttonlink" style = "display:none" onclick="gname('practice3_t').value = tock(); gid('specialString').style.display='block'; gid('thirdpractice').style.display = 'none';tick();">Next</div>
+            
+            <!-- <div id="nextButton12" class="buttonlink" style = "display:block";
+                onclick="gid('fun_div').style.display='block'; gid('thirdpractice').style.display = 'none';tick();">Next2</div> -->
+        </div>
+        
+        <!------------------------------------------------------------------------------------------------------------------------------------------->
+        
+        <div id="specialString" style="display:none" class="container">
+            <h1> Choose a special string</h1>
+            
+              <ul>
+                  <li>Choose a string that contains an uppercase letter, a number and a special character. You will append this string to all of your passwords.
+                      <br>
+                      <table>
+                          <tr>
+                              <td>
+                      <input name="specialStringInput" type="text2" maxlength="10" size="10" placeholder="String">
+                          </td>
+                              </tr>
+                          </table>
+              </ul>
+              
+        <div id="spcialCheckButton" class="buttonlink" style = "display:block" onclick=" checkSpecialString();">Submit</div>
+              
+            
+        <div id="specialNextButton" class="buttonlink" style = "display:none" onclick=" gname('specialString_time').value = tock(); gid('fun_div').style.display='block'; gid('specialString').style.display = 'none';tick();">Next</div>
+        
+        </div>
+        <!------------------------------------------------------------------------------------------------------------------------------------------->
+        
+        <div id="fun_div" style="display:none;" class="container">
+            <h1>Try generating passwords!</h1><h2 id="webCounter" margin-left:20px style="display:block" > 0/20 </h2>
+            <ul>
+                <li> Now you can generate a whole new set of passwords! Let's try this method on a few websites.</li>
+                <li> Click on the hints buttons to get a reminder of your letter code and the instructions.</li>
+            </ul>
+            
+            
+            <div id="lastTable" style="display:none">
+                <table align="center" >
+                    <tr><td>
+                        <table align="center" border="1" >
+                            <tr><td style="padding: 20px;" >Website</td><td style="padding: 20px;" >Password</td></tr>
+                            <tr>
+                                <td id="website_name" style="font-size:20px;font-weight:900; padding: 20px; "></td>
+                                <td style="padding: 20px;">
+                                    <textarea cols="20" name="q0" placeholder="Type password" style="font-size:18px" rows="1" ></textarea>
+                                    
+                                    <textarea cols="20" name="q1" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q2" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q3" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q4" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q5" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q6" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q7" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q8" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q9" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q10" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q11" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q12" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q13" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q14" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q15" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q16" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q17" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q18" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                    <textarea cols="20" name="q19" placeholder="Type password" style="font-size:18px; display:none;" rows="1"></textarea>
+                                </td>
+                                <!-- verify_div -->
+                                
+                            </tr>
+                        </table>
+                    </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 20px;">
+                            <div id="verify_div"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <br>
+            <table>
+                <tr>
+                    <td>
+            <div class="buttonlink" id="eval_button" onclick="eval_click_password(); ">Begin</div>
+                    </td>
+                </tr>
+            </table>
+            
+            
+            
+            <table>
+            <tr>
+            <td><div class="hintbutton" onclick ="showLetterCode()"> Show letter code </div></td>
+            <td><div class="hintbutton" onclick ="showInstructionsF()"> Show instructions </div></td>
+            </tr>
+            </table>
+            
+            <br>
+            <br>
+            <br>
+            <div id = "InsHintF"  style="display:none">
+                <div class="instContainer">
+                    <ul>
+                        <li> Go over the name of the website letter by letter and type the mapping of each letter. </li>
+                        <li> Type the special string <div id="stringHint" style="display:block;font-weight:900"></div>
+                            <!-- <textarea cols="10" rows="1" id="stringHint"> </textarea>-->
+                            
+                        </li>
+                        <li> Remember that you memorized the map only for the first 20 letters of the alphabet. If you see <font color="red">u,v,w,x,y,z</font> in the website name, just skip to the next letter. </font></li>
+                    </ul>
+                </div>
+                
+            </div>
+            <br>
+            <div id = "letterCodeHint" style="display:none">
+                <table border="1" class="pw">
+                    <tr>
+                        <td>a</td> <td>b</td> <td>c</td> <td>d</td> <td>e</td> <td>f</td> <td>g</td> <td>h</td> <td>i</td> <td>j</td> <td>k</td> <td>l</td> <td>m</td> <td>n</td>
+                        <td>o</td> <td>p</td> <td>q</td> <td>r</td> <td>s</td> <td>t</td>
+                    </tr>
+                    
+                    <tr>
+                        <td><input name="fh_lmap1" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap2" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap3" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap4" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap5" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap6" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap7" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap8" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap9" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap10" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap11" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap12" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap13" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap14" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap15" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap16" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap17" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap18" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap19" type="text" readOnly=true ></td>
+                        <td><input name="fh_lmap20" type="text" readOnly=true ></td>
+                    </tr>
+                </table>
+            </div>
+         </div>
+<!------------------------------------------------------------------------------------------------->
+
+            <div id="feedback" style="display:none;">
+                <p> You are one of the first users to try this password strategy, thank you so much!  Please help us improve this HIT by answering the following questions.</p>
+                <ul>
+                    <li> On a scale of 1-10, was this task enjoyable/fun? (1: painful, 10: I enjoyed it)
+                        <textarea rows="1" cols="10" placeholder="fun" name="fun"></textarea> </li></li>
+                    <li> On a scale of 1-10, how hard was the task? (1: the easiest, 10: the hardest)
+                        <textarea rows="1" cols="10" placeholder="hardness" name="hardness"></textarea> </li>
+                    <li> Did password generation become easier towards the end?
+                        <textarea rows="1" cols="10" placeholder="Yes/No" name="easyEnding"></textarea> </li>
+                    <li> Would you spend 30 minutes to memorize a letter code of your own and adopt this strategy in real life?
+                        <textarea rows="1" cols="10" placeholder="Yes/No" name="yesNo1"></textarea></li>
+                    <li> Did you write anything down? We ask this for our own statistics. Your answer to this question does not affect acceptance of your hit or your payment.
+                        <textarea rows="1" cols="10" placeholder="Yes/No" name="yesNo2"></textarea></li>
+                </ul>
+                
+                <!-- <p><b> If you would like to attend a short survey about this HIT tomorrow, please provide your email address here. The survey will take about 5 minutes and we will pay you $3.</b>
+                <textarea rows="1" cols="20" placeholder="Email Address" name="emailAddress"></textarea></li>
+                </p> -->
+                
+                <p>Any other feedback? We'd love to hear!</p>
+                
+                <textarea rows="3" cols="80" placeholder="Feedback" name="feedbackText"></textarea>
+                
+                <p>For more information on password strategies, visit <a href="http://www.safepasswords.org">our website </a>.
+                <p>You may now submit this HIT. </p>
+                <h1>Thank You!!</h1>
+                
+                <!-- </div> -->
+            </div>
+            
+            <input type="hidden" name="specialString_time" value="0" />
+            
+            <input type="hidden" name="lmapString" value="" />
+            <input type="hidden" name="wmapString" value="">
+            
+            <input type="hidden" name="mapping_t" value="0" />
+            <input type="hidden" name="words_t" value="0" />
+            
+            <input type="hidden" name="memorization1_t" value="0" />
+            <input type="hidden" name="memorization2_t" value="0" />
+            
+            
+            <input type="hidden" name="practice1_t" value="0" />
+            <input type="hidden" name="practice2_t" value="0" />
+            <input type="hidden" name="practice3_t" value="0" />
+            
+            <input type="hidden" name="codeHintCount" value="0" />
+            <input type="hidden" name="instHintCount" value="0" />
+            
+            <input type="hidden" name="counter" value="0" />
+            <input type="hidden" name="instruction1_time" value="0" />
+            <input type="hidden" name="instruction2_time" value="0" />
+            <input type="hidden" name="memorization_1" value="0" />
+            <input type="hidden" name="memorization_2" value="0" />
+            <input type="hidden" name="practice_1" value="0" />
+            <input type="hidden" name="practice_2" value="0" />
+            <input type="hidden" name="practice_3" value="0" />
+            <input type="hidden" name="practice_4" value="0" />
+            <input type="hidden" name="practice_final" value="0" />
+            
+            
+            
+            <input type="hidden" name="q100_correct" value="0" />
+            <input type="hidden" name="q101_correct" value="0" />
+            <input type="hidden" name="q102_correct" value="0" />
+            <input type="hidden" name="q103_correct" value="0" />
+            <input type="hidden" name="q104_correct" value="0" />
+            <input type="hidden" name="q105_correct" value="0" />
+            <input type="hidden" name="q106_correct" value="0" />
+            <input type="hidden" name="q107_correct" value="0" />
+            <input type="hidden" name="q108_correct" value="0" />
+            <input type="hidden" name="q109_correct" value="0" />
+            <input type="hidden" name="q110_correct" value="0" />
+            <input type="hidden" name="q111_correct" value="0" />
+            <input type="hidden" name="q112_correct" value="0" />
+            <input type="hidden" name="q113_correct" value="0" />
+            <input type="hidden" name="q114_correct" value="0" />
+            <input type="hidden" name="q115_correct" value="0" />
+            <input type="hidden" name="q116_correct" value="0" />
+            <input type="hidden" name="q117_correct" value="0" />
+            <input type="hidden" name="q118_correct" value="0" />
+            
+            <input type="hidden" name="q100_first" value="0" />
+            <input type="hidden" name="q101_first" value="0" />
+            <input type="hidden" name="q102_first" value="0" />
+            <input type="hidden" name="q103_first" value="0" />
+            <input type="hidden" name="q104_first" value="0" />
+            <input type="hidden" name="q105_first" value="0" />
+            <input type="hidden" name="q106_first" value="0" />
+            <input type="hidden" name="q107_first" value="0" />
+            <input type="hidden" name="q108_first" value="0" />
+            <input type="hidden" name="q109_first" value="0" />
+            <input type="hidden" name="q110_first" value="0" />
+            <input type="hidden" name="q111_first" value="0" />
+            <input type="hidden" name="q112_first" value="0" />
+            <input type="hidden" name="q113_first" value="0" />
+            <input type="hidden" name="q114_first" value="0" />
+            <input type="hidden" name="q115_first" value="0" />
+            <input type="hidden" name="q116_first" value="0" />
+            <input type="hidden" name="q117_first" value="0" />
+            <input type="hidden" name="q118_first" value="0" />
+            
+            
+            <input type="hidden" name="q200_correct" value="0" />
+            <input type="hidden" name="q201_correct" value="0" />
+            <input type="hidden" name="q202_correct" value="0" />
+            <input type="hidden" name="q203_correct" value="0" />
+            <input type="hidden" name="q204_correct" value="0" />
+            <input type="hidden" name="q205_correct" value="0" />
+            <input type="hidden" name="q206_correct" value="0" />
+            <input type="hidden" name="q207_correct" value="0" />
+            <input type="hidden" name="q208_correct" value="0" />
+            <input type="hidden" name="q209_correct" value="0" />
+            <input type="hidden" name="q210_correct" value="0" />
+            <input type="hidden" name="q211_correct" value="0" />
+            <input type="hidden" name="q212_correct" value="0" />
+            <input type="hidden" name="q213_correct" value="0" />
+            <input type="hidden" name="q214_correct" value="0" />
+            <input type="hidden" name="q215_correct" value="0" />
+            <input type="hidden" name="q216_correct" value="0" />
+            <input type="hidden" name="q217_correct" value="0" />
+            <input type="hidden" name="q218_correct" value="0" />
+            
+            <input type="hidden" name="q200_first" value="0" />
+            <input type="hidden" name="q201_first" value="0" />
+            <input type="hidden" name="q202_first" value="0" />
+            <input type="hidden" name="q203_first" value="0" />
+            <input type="hidden" name="q204_first" value="0" />
+            <input type="hidden" name="q205_first" value="0" />
+            <input type="hidden" name="q206_first" value="0" />
+            <input type="hidden" name="q207_first" value="0" />
+            <input type="hidden" name="q208_first" value="0" />
+            <input type="hidden" name="q209_first" value="0" />
+            <input type="hidden" name="q210_first" value="0" />
+            <input type="hidden" name="q211_first" value="0" />
+            <input type="hidden" name="q212_first" value="0" />
+            <input type="hidden" name="q213_first" value="0" />
+            <input type="hidden" name="q214_first" value="0" />
+            <input type="hidden" name="q215_first" value="0" />
+            <input type="hidden" name="q216_first" value="0" />
+            <input type="hidden" name="q217_first" value="0" />
+            <input type="hidden" name="q218_first" value="0" />
+            
+            
+            <input type="hidden" name="q300_correct" value="0" />
+            <input type="hidden" name="q301_correct" value="0" />
+            <input type="hidden" name="q302_correct" value="0" />
+            <input type="hidden" name="q303_correct" value="0" />
+            <input type="hidden" name="q304_correct" value="0" />
+            <input type="hidden" name="q305_correct" value="0" />
+            <input type="hidden" name="q306_correct" value="0" />
+            <input type="hidden" name="q307_correct" value="0" />
+            <input type="hidden" name="q308_correct" value="0" />
+            <input type="hidden" name="q309_correct" value="0" />
+            <input type="hidden" name="q310_correct" value="0" />
+            <input type="hidden" name="q311_correct" value="0" />
+            <input type="hidden" name="q312_correct" value="0" />
+            <input type="hidden" name="q313_correct" value="0" />
+            <input type="hidden" name="q314_correct" value="0" />
+            <input type="hidden" name="q315_correct" value="0" />
+            <input type="hidden" name="q316_correct" value="0" />
+            <input type="hidden" name="q317_correct" value="0" />
+            <input type="hidden" name="q318_correct" value="0" />
+            
+            <input type="hidden" name="q300_first" value="0" />
+            <input type="hidden" name="q301_first" value="0" />
+            <input type="hidden" name="q302_first" value="0" />
+            <input type="hidden" name="q303_first" value="0" />
+            <input type="hidden" name="q304_first" value="0" />
+            <input type="hidden" name="q305_first" value="0" />
+            <input type="hidden" name="q306_first" value="0" />
+            <input type="hidden" name="q307_first" value="0" />
+            <input type="hidden" name="q308_first" value="0" />
+            <input type="hidden" name="q309_first" value="0" />
+            <input type="hidden" name="q310_first" value="0" />
+            <input type="hidden" name="q311_first" value="0" />
+            <input type="hidden" name="q312_first" value="0" />
+            <input type="hidden" name="q313_first" value="0" />
+            <input type="hidden" name="q314_first" value="0" />
+            <input type="hidden" name="q315_first" value="0" />
+            <input type="hidden" name="q316_first" value="0" />
+            <input type="hidden" name="q317_first" value="0" />
+            <input type="hidden" name="q318_first" value="0" />
+            
+            
+            <input type="hidden" name="q400_correct" value="0" />
+            <input type="hidden" name="q401_correct" value="0" />
+            <input type="hidden" name="q402_correct" value="0" />
+            <input type="hidden" name="q403_correct" value="0" />
+            <input type="hidden" name="q404_correct" value="0" />
+            <input type="hidden" name="q405_correct" value="0" />
+            <input type="hidden" name="q406_correct" value="0" />
+            <input type="hidden" name="q407_correct" value="0" />
+            <input type="hidden" name="q408_correct" value="0" />
+            <input type="hidden" name="q409_correct" value="0" />
+            <input type="hidden" name="q410_correct" value="0" />
+            <input type="hidden" name="q411_correct" value="0" />
+            <input type="hidden" name="q412_correct" value="0" />
+            <input type="hidden" name="q413_correct" value="0" />
+            <input type="hidden" name="q414_correct" value="0" />
+            <input type="hidden" name="q415_correct" value="0" />
+            <input type="hidden" name="q416_correct" value="0" />
+            <input type="hidden" name="q417_correct" value="0" />
+            <input type="hidden" name="q418_correct" value="0" />
+            
+            <input type="hidden" name="q400_first" value="0" />
+            <input type="hidden" name="q401_first" value="0" />
+            <input type="hidden" name="q402_first" value="0" />
+            <input type="hidden" name="q403_first" value="0" />
+            <input type="hidden" name="q404_first" value="0" />
+            <input type="hidden" name="q405_first" value="0" />
+            <input type="hidden" name="q406_first" value="0" />
+            <input type="hidden" name="q407_first" value="0" />
+            <input type="hidden" name="q408_first" value="0" />
+            <input type="hidden" name="q409_first" value="0" />
+            <input type="hidden" name="q410_first" value="0" />
+            <input type="hidden" name="q411_first" value="0" />
+            <input type="hidden" name="q412_first" value="0" />
+            <input type="hidden" name="q413_first" value="0" />
+            <input type="hidden" name="q414_first" value="0" />
+            <input type="hidden" name="q415_first" value="0" />
+            <input type="hidden" name="q416_first" value="0" />
+            <input type="hidden" name="q417_first" value="0" />
+            <input type="hidden" name="q418_first" value="0" />
+            
+            <input type="hidden" name="q500_correct" value="0" />
+            <input type="hidden" name="q501_correct" value="0" />
+            <input type="hidden" name="q502_correct" value="0" />
+            <input type="hidden" name="q503_correct" value="0" />
+            <input type="hidden" name="q504_correct" value="0" />
+            <input type="hidden" name="q505_correct" value="0" />
+            <input type="hidden" name="q506_correct" value="0" />
+            <input type="hidden" name="q507_correct" value="0" />
+            <input type="hidden" name="q508_correct" value="0" />
+            <input type="hidden" name="q509_correct" value="0" />
+            <input type="hidden" name="q510_correct" value="0" />
+            <input type="hidden" name="q511_correct" value="0" />
+            <input type="hidden" name="q512_correct" value="0" />
+            <input type="hidden" name="q513_correct" value="0" />
+            <input type="hidden" name="q514_correct" value="0" />
+            <input type="hidden" name="q515_correct" value="0" />
+            <input type="hidden" name="q516_correct" value="0" />
+            <input type="hidden" name="q517_correct" value="0" />
+            <input type="hidden" name="q518_correct" value="0" />
+            <input type="hidden" name="q519_correct" value="0" />
+            
+            <input type="hidden" name="q500_first" value="0" />
+            <input type="hidden" name="q501_first" value="0" />
+            <input type="hidden" name="q502_first" value="0" />
+            <input type="hidden" name="q503_first" value="0" />
+            <input type="hidden" name="q504_first" value="0" />
+            <input type="hidden" name="q505_first" value="0" />
+            <input type="hidden" name="q506_first" value="0" />
+            <input type="hidden" name="q507_first" value="0" />
+            <input type="hidden" name="q508_first" value="0" />
+            <input type="hidden" name="q509_first" value="0" />
+            <input type="hidden" name="q510_first" value="0" />
+            <input type="hidden" name="q511_first" value="0" />
+            <input type="hidden" name="q512_first" value="0" />
+            <input type="hidden" name="q513_first" value="0" />
+            <input type="hidden" name="q514_first" value="0" />
+            <input type="hidden" name="q515_first" value="0" />
+            <input type="hidden" name="q516_first" value="0" />
+            <input type="hidden" name="q517_first" value="0" />
+            <input type="hidden" name="q518_first" value="0" />
+            <input type="hidden" name="q519_first" value="0" />
+            
+            <input type="hidden" name="q600_correct" value="0" />
+            <input type="hidden" name="q601_correct" value="0" />
+            <input type="hidden" name="q602_correct" value="0" />
+            <input type="hidden" name="q603_correct" value="0" />
+            <input type="hidden" name="q604_correct" value="0" />
+            <input type="hidden" name="q605_correct" value="0" />
+            <input type="hidden" name="q606_correct" value="0" />
+            <input type="hidden" name="q607_correct" value="0" />
+            <input type="hidden" name="q608_correct" value="0" />
+            <input type="hidden" name="q609_correct" value="0" />
+            <input type="hidden" name="q610_correct" value="0" />
+            <input type="hidden" name="q611_correct" value="0" />
+            <input type="hidden" name="q612_correct" value="0" />
+            <input type="hidden" name="q613_correct" value="0" />
+            <input type="hidden" name="q614_correct" value="0" />
+            <input type="hidden" name="q615_correct" value="0" />
+            <input type="hidden" name="q616_correct" value="0" />
+            <input type="hidden" name="q617_correct" value="0" />
+            <input type="hidden" name="q618_correct" value="0" />
+            <input type="hidden" name="q619_correct" value="0" />
+            
+            <input type="hidden" name="q600_first" value="0" />
+            <input type="hidden" name="q601_first" value="0" />
+            <input type="hidden" name="q602_first" value="0" />
+            <input type="hidden" name="q603_first" value="0" />
+            <input type="hidden" name="q604_first" value="0" />
+            <input type="hidden" name="q605_first" value="0" />
+            <input type="hidden" name="q606_first" value="0" />
+            <input type="hidden" name="q607_first" value="0" />
+            <input type="hidden" name="q608_first" value="0" />
+            <input type="hidden" name="q609_first" value="0" />
+            <input type="hidden" name="q610_first" value="0" />
+            <input type="hidden" name="q611_first" value="0" />
+            <input type="hidden" name="q612_first" value="0" />
+            <input type="hidden" name="q613_first" value="0" />
+            <input type="hidden" name="q614_first" value="0" />
+            <input type="hidden" name="q615_first" value="0" />
+            <input type="hidden" name="q616_first" value="0" />
+            <input type="hidden" name="q617_first" value="0" />
+            <input type="hidden" name="q618_first" value="0" />
+            <input type="hidden" name="q619_first" value="0" />
+            
+            <input type="hidden" name="q700_correct" value="0" />
+            <input type="hidden" name="q701_correct" value="0" />
+            <input type="hidden" name="q702_correct" value="0" />
+            <input type="hidden" name="q703_correct" value="0" />
+            <input type="hidden" name="q704_correct" value="0" />
+            <input type="hidden" name="q705_correct" value="0" />
+            <input type="hidden" name="q706_correct" value="0" />
+            <input type="hidden" name="q707_correct" value="0" />
+            <input type="hidden" name="q708_correct" value="0" />
+            <input type="hidden" name="q709_correct" value="0" />
+            
+            
+            <input type="hidden" name="q700_first" value="0" />
+            <input type="hidden" name="q701_first" value="0" />
+            <input type="hidden" name="q702_first" value="0" />
+            <input type="hidden" name="q703_first" value="0" />
+            <input type="hidden" name="q704_first" value="0" />
+            <input type="hidden" name="q705_first" value="0" />
+            <input type="hidden" name="q706_first" value="0" />
+            <input type="hidden" name="q707_first" value="0" />
+            <input type="hidden" name="q708_first" value="0" />
+            <input type="hidden" name="q709_first" value="0" />
+            
+            <input type="hidden" name="q0_time" value="0" />
+            <input type="hidden" name="q1_time" value="0" />
+            <input type="hidden" name="q2_time" value="0" />
+            <input type="hidden" name="q3_time" value="0" />
+            <input type="hidden" name="q4_time" value="0" />
+            <input type="hidden" name="q5_time" value="0" />
+            <input type="hidden" name="q6_time" value="0" />
+            <input type="hidden" name="q7_time" value="0" />
+            <input type="hidden" name="q8_time" value="0" />
+            <input type="hidden" name="q9_time" value="0" />
+            <input type="hidden" name="q10_time" value="0" />
+            <input type="hidden" name="q11_time" value="0" />
+            <input type="hidden" name="q12_time" value="0" />
+            <input type="hidden" name="q13_time" value="0" />
+            <input type="hidden" name="q14_time" value="0" />
+            <input type="hidden" name="q15_time" value="0" />
+            <input type="hidden" name="q16_time" value="0" />
+            <input type="hidden" name="q17_time" value="0" />
+            <input type="hidden" name="q18_time" value="0" />
+            <input type="hidden" name="q19_time" value="0" />
+            
+            
+            <input type="hidden" name="q0_correct" value="0" />
+            <input type="hidden" name="q1_correct" value="0" />
+            <input type="hidden" name="q2_correct" value="0" />
+            <input type="hidden" name="q3_correct" value="0" />
+            <input type="hidden" name="q4_correct" value="0" />
+            <input type="hidden" name="q5_correct" value="0" />
+            <input type="hidden" name="q6_correct" value="0" />
+            <input type="hidden" name="q7_correct" value="0" />
+            <input type="hidden" name="q8_correct" value="0" />
+            <input type="hidden" name="q9_correct" value="0" />
+            <input type="hidden" name="q10_correct" value="0" />
+            <input type="hidden" name="q11_correct" value="0" />
+            <input type="hidden" name="q12_correct" value="0" />
+            <input type="hidden" name="q13_correct" value="0" />
+            <input type="hidden" name="q14_correct" value="0" />
+            <input type="hidden" name="q15_correct" value="0" />
+            <input type="hidden" name="q16_correct" value="0" />
+            <input type="hidden" name="q17_correct" value="0" />
+            <input type="hidden" name="q18_correct" value="0" />
+            <input type="hidden" name="q19_correct" value="0" />
+            
+            
+            <input type="hidden" name="q0_0" value="0" />
+            <input type="hidden" name="q1_0" value="0" />
+            <input type="hidden" name="q2_0" value="0" />
+            <input type="hidden" name="q3_0" value="0" />
+            <input type="hidden" name="q4_0" value="0" />
+            <input type="hidden" name="q5_0" value="0" />
+            <input type="hidden" name="q6_0" value="0" />
+            <input type="hidden" name="q7_0" value="0" />
+            <input type="hidden" name="q8_0" value="0" />
+            <input type="hidden" name="q9_0" value="0" />
+            <input type="hidden" name="q10_0" value="0" />
+            <input type="hidden" name="q11_0" value="0" />
+            <input type="hidden" name="q12_0" value="0" />
+            <input type="hidden" name="q13_0" value="0" />
+            <input type="hidden" name="q14_0" value="0" />
+            <input type="hidden" name="q15_0" value="0" />
+            <input type="hidden" name="q16_0" value="0" />
+            <input type="hidden" name="q17_0" value="0" />
+            <input type="hidden" name="q18_0" value="0" />
+            <input type="hidden" name="q19_0" value="0" />
+            
+            
+            <input type="hidden" name="q0_1" value="0" />
+            <input type="hidden" name="q1_1" value="0" />
+            <input type="hidden" name="q2_1" value="0" />
+            <input type="hidden" name="q3_1" value="0" />
+            <input type="hidden" name="q4_1" value="0" />
+            <input type="hidden" name="q5_1" value="0" />
+            <input type="hidden" name="q6_1" value="0" />
+            <input type="hidden" name="q7_1" value="0" />
+            <input type="hidden" name="q8_1" value="0" />
+            <input type="hidden" name="q9_1" value="0" />
+            <input type="hidden" name="q10_1" value="0" />
+            <input type="hidden" name="q11_1" value="0" />
+            <input type="hidden" name="q12_1" value="0" />
+            <input type="hidden" name="q13_1" value="0" />
+            <input type="hidden" name="q14_1" value="0" />
+            <input type="hidden" name="q15_1" value="0" />
+            <input type="hidden" name="q16_1" value="0" />
+            <input type="hidden" name="q17_1" value="0" />
+            <input type="hidden" name="q18_1" value="0" />
+            <input type="hidden" name="q19_1" value="0" />
+            
+            
+            <input type="hidden" name="q0_2" value="0" />
+            <input type="hidden" name="q1_2" value="0" />
+            <input type="hidden" name="q2_2" value="0" />
+            <input type="hidden" name="q3_2" value="0" />
+            <input type="hidden" name="q4_2" value="0" />
+            <input type="hidden" name="q5_2" value="0" />
+            <input type="hidden" name="q6_2" value="0" />
+            <input type="hidden" name="q7_2" value="0" />
+            <input type="hidden" name="q8_2" value="0" />
+            <input type="hidden" name="q9_2" value="0" />
+            <input type="hidden" name="q10_2" value="0" />
+            <input type="hidden" name="q11_2" value="0" />
+            <input type="hidden" name="q12_2" value="0" />
+            <input type="hidden" name="q13_2" value="0" />
+            <input type="hidden" name="q14_2" value="0" />
+            <input type="hidden" name="q15_2" value="0" />
+            <input type="hidden" name="q16_2" value="0" />
+            <input type="hidden" name="q17_2" value="0" />
+            <input type="hidden" name="q18_2" value="0" />
+            <input type="hidden" name="q19_2" value="0" />
+            
+            </body>
+</html>

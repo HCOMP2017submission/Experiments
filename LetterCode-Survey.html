@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <script>
+            
+            
+            
+            var done_can_submit = true;
+            var challenge = "";
+            var webCounterVar = 0;
+            
+            
+            function gid(id) {
+                return document.getElementById(id);
+            }
+        function hint(el, text) {
+            el.innerText = text;
+        }
+        
+        function gname(name) {
+            return document.getElementsByName(name)[0];
+        }
+        
+        var timer;
+        function tick() {
+            timer = new Date();
+        }
+        
+        function tock() {
+            return (new Date() - timer);
+        }
+        
+        function showInstructions(){
+            
+            if (gid("instructions").style.display == undefined || gid("instructions").style.display == "none"){
+                gid("instructions").style.display = "block";
+                gname("instCounter").value = parseInt(gname("instCounter").value) + 1;
+            }else{
+                gid("instructions").style.display = "none";
+            }
+        }
+        
+        setInterval(function () {
+                    var button = gid("submitButton");
+                    if (!button) return;
+                    button.style.display = done_can_submit ? "block" : "none";
+                    button.disabled = !done_can_submit;
+                    }, 100)
+                    
+                    
+            </script>
+        
+        
+        <style>
+            .pw {
+                font-family: monospace;
+                font-size: 140%;
+                font-weight: bold;
+            }
+        
+        .hint {
+            color: black;
+            border : none;
+            font-size: 100%;
+            font-weight : bold;
+        }
+        
+        .correct {
+            color: green;
+        }
+        
+        .wrong {
+            color: red;
+        }
+        
+        
+        .buttonlink {
+            display: inline-block;
+            border-style: solid;
+            border-color: #bbb #888 #666 #aaa;
+            border-width: 3px 4px 4px 3px;
+            width: 9em;
+            height: 2em;
+            background-color: 	#FAEBD7;
+            line-height: 2;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            cursor:pointer;
+        }
+        
+        
+        .buttonlink2 {
+            display: inline-block;
+            border-style: solid;
+            border-color: #bbb #888 #666 #aaa;
+            border-width: 3px 4px 4px 3px;
+            width: 9em;
+            height: 2em;
+            background-color: 	#FAEBD7;
+            line-height: 2;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            cursor:pointer;
+            float : left;
+            margin-right:10px;
+        }
+        
+        
+        
+        .hintbutton {
+            display: inline-block;
+            border-style: solid;
+            border-color: #bbb #888 #666 #aaa;
+            border-width: 3px 4px 4px 3px;
+            width: 15em;
+            height: 2em;
+            background-color: #DAA520;
+            line-height: 2;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            cursor:pointer;
+            float : left;
+            margin-right:10px;
+        }
+        
+        
+        
+        
+        .buttonlink:hover {
+            border-color: #666 #aaa #bbb #888;
+            border-width: 4px 3px 3px 4px;
+            color: #000;
+        }
+        
+        .visible
+        {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 2s linear;
+        }
+        
+        .hidden
+        {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 2s, opacity 2s linear;
+        }
+        
+        
+        table {
+            border-collapse: collapse;
+            border-spacing: 10px 50px;
+            text-align: center;
+            clear: left;
+            
+        }
+        
+        th, td{
+            padding: 2px;
+            
+        }
+        
+        input {
+            width: 50px;
+            margin: 5px;
+            font-size: 15px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            /*             border: 5px ;  */
+        }
+        
+        .firstPageTable {
+            float:left;
+            margin:1em;
+            width:300px;
+            height:300px;
+            
+        }
+        
+        .colorTableHead {
+            color:#0000FF;
+        }
+        input[type="text"] {
+            width: 85%;
+            height: 100%;
+            box-sizing: border-box;
+            -webkit-box-sizing:border-box;
+            -moz-box-sizing: border-box;
+            style="background-color:#FCF5D8;">
+        }
+        .container{
+            /* width : 500px; */
+            width: 300px;
+            border: 2px solid #DAA520;
+            padding: 25px;
+            margin: 25px;
+        }
+        
+        .container2{
+            width : 700px;
+            /* border: 2px solid #DAA520; */
+            /* padding: 10px; */
+            margin-left: 5px;
+        }
+        
+        
+        
+            </style>
+    </head>
+    
+    <body>
+        
+        <div id="start" style="display:block;" class="container2">
+            
+            <center>
+                <h1>How well you can remember the
+                    Letter Code Strategy?</h1>
+                <p>&nbsp;</p>
+            </center>
+            
+        
+            <table >
+                <tr>
+                    <td align="left">
+                        
+                        <ul>
+                            <li>Do you remember the words that you used? Type the words and the letter codes.</li>
+                            </ul>
+                        
+                            <table>
+                                <tr>
+                                    <td>
+                                        
+                            <table align="center" border="1" style="pw" >
+                                <tr>
+                                    <th>a</th><th><input type="text" size="10" class="form-control" name="lmap1"
+                                        placeholder="letter"> </th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap1"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                
+                                    <tr>
+                                    <th>b</th><th><input type="text" size="10" class="form-control" name="lmap2" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap2"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>c</th><th><input type="text" size="10" class="form-control" name="lmap3" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap3"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>d</th><th><input type="text" size="10" class="form-control" name="lmap4" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap4"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>e</th><th><input type="text" size="10" class="form-control" name="lmap5" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap5"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>f</th><th><input type="text" size="10" class="form-control" name="lmap6" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap6"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>g</th><th><input type="text" size="10" class="form-control" name="lmap7" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap7"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>h</th><th><input type="text" size="10" class="form-control" name="lmap8" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap8"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>i</th><th><input type="text" size="10" class="form-control" name="lmap9" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap9"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>j</th><th><input type="text" size="10" class="form-control" name="lmap10" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap10"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    </table>
+                                    </td>
+                                    
+                                    <td>
+                                    </td>
+                                    
+                                    <td>
+                                    </td>
+                                    
+                                    <td>
+                                    </td>
+                                    
+                                    <td>
+                                    </td>
+                                    
+                                    <td>
+                                    </td>
+                                    
+                                    <td>
+                                    </td>
+
+
+
+                                    <td>
+                                    <table align="center" border="1" style="pw">
+                                    
+                                    <tr>
+                                    <th>k</th><th><input type="text" size="10" class="form-control" name="lmap11" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap11"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>l</th><th><input type="text" size="10" class="form-control" name="lmap12" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap12"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    
+                                    <tr>
+                                    <th>m</th><th><input type="text" size="10" class="form-control" name="lmap13" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap13"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>n</th><th><input type="text" size="10" class="form-control" name="lmap14" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap14"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>o</th><th><input type="text" size="10" class="form-control" name="lmap15" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap15"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>p</th><th><input type="text" size="10" class="form-control" name="lmap16" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap16"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>q</th><th><input type="text" size="10" class="form-control" name="lmap17" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap17"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>r</th><th><input type="text" size="10" class="form-control" name="lmap18" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap18"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>s</th><th><input type="text" size="10" class="form-control" name="lmap19" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap19"
+                                        placeholder="word"> </th>
+                                    </tr>
+                                    
+                                    <tr>
+                                    <th>t</th><th><input type="text" size="10" class="form-control" name="lmap20" placeholder="letter"></th>
+                                    <th><input type="text" size="10" class="form-control" name="wmap20"
+                                        placeholder="word"> </th>
+                                    </tr>
+                            </table>
+                    </td>
+                </tr>
+                </table>
+                
+                
+                <tr>
+                    <td align="left">
+                        <br>
+                        <ul>
+                        <li>What was the special string that you appended to the end of your passwords?</li>
+                        </ul>
+                        
+                        <table style="width:100%">
+                            <tr>
+                                <td>
+                                    <input name="specialString" type="text" maxlength="10" size="10" placeholder="Special String">
+                                        </td>
+                            </tr>
+                        </table>
+                        
+                        </td>
+                    </tr>
+                    
+                    
+                    <tr>
+                        <td align="left">
+                            <br>
+                            <ul>
+                            <li> Type the password for <i>drop.com</i> </li>
+                            </ul>
+                            
+                            <table style="width:100%">
+                                <tr>
+                                    <td>
+                                        <input name="dropPass" type="text" maxlength="10" size="10" placeholder="Password">
+                                            </td>
+                                </tr>
+                            </table>
+                            
+                            
+                            </td>
+                    </tr>
+                    </table>
+            
+            <p>&nbsp;</p>
+            
+            
+            
+            
+            
+                            <table>
+                                <tr>
+                                    <td><div class="hintbutton" onclick ="showInstructions()"> Remind me of instructions </div></td>
+                                </tr>
+                            </table>
+                        
+                        
+        
+                        <p>&nbsp;</p>
+                        
+                        <div id="instructions" style="display:none" class="container">
+                            
+                            <ul>
+                                <li>Go over the name of the website letter by letter and type the code of each letter.</li>
+                                
+                                <li>Append the special string to the end of your password.
+                                </li>
+                                
+                                <li>
+                                    Remember that you memorized the map only for the first 20 letters of the alphabet. If you see <font color="red">u,v,w,x,y,z</font> in the website name, just skip to the next letter.
+                                </li>
+                                
+                            </ul>
+                        </div>
+                        
+                        
+                        </div>
+        
+        
+                <h3>Thanks a lot for participating in this survey.</h3>
+                <h3>  You may now submit this HIT. </h3>
+                </h3>
+                
+                <br>
+                </div>
+        
+        <!------------------------------------------------------------------------------------------------------------------------------------------------->
+        
+        
+        
+        <input type="hidden" name="instCounter" value="0" />
+        
+    </body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="utf-8" />
+        <title></title>
+        <script>
+            
+            
+            
+            var done_can_submit = true;
+            
+            var challenge = "";
+            var webCounterVar = 0;
+            
+            
+            
+            
+            function gid(id) {
+                return document.getElementById(id);
+            }
+        function hint(el, text) {
+            el.innerText = text;
+        }
+        
+        function gname(name) {
+            return document.getElementsByName(name)[0];
+        }
+        
+        var timer;
+        function tick() {
+            timer = new Date();
+        }
+        
+        function tock() {
+            return (new Date() - timer);
+        }
+        
+        function showInstructions(){
+            
+            if (gid("instructions").style.display == undefined || gid("instructions").style.display == "none"){
+                gid("instructions").style.display = "block";
+                gname("instCounter").value = parseInt(gname("instCounter").value) + 1;
+            }else{
+                gid("instructions").style.display = "none";
+            }
+        }
+        
+        setInterval(function () {
+                    var button = gid("submitButton");
+                    if (!button) return;
+                    button.style.display = done_can_submit ? "block" : "none";
+                    button.disabled = !done_can_submit;
+                    }, 100)
+                    
+                    
+            </script>
+        
+        
+        <style>
+            .pw {
+                font-family: monospace;
+                font-size: 140%;
+                font-weight: bold;
+            }
+        
+        .hint {
+            color: black;
+            border : none;
+            font-size: 100%;
+            font-weight : bold;
+        }
+        
+        .correct {
+            color: green;
+        }
+        
+        .wrong {
+            color: red;
+        }
+        
+        
+        .buttonlink {
+            display: inline-block;
+            border-style: solid;
+            border-color: #bbb #888 #666 #aaa;
+            border-width: 3px 4px 4px 3px;
+            width: 9em;
+            height: 2em;
+            background-color: 	#FAEBD7;
+            line-height: 2;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            cursor:pointer;
+        }
+        
+        
+        .buttonlink2 {
+            display: inline-block;
+            border-style: solid;
+            border-color: #bbb #888 #666 #aaa;
+            border-width: 3px 4px 4px 3px;
+            width: 9em;
+            height: 2em;
+            background-color: 	#FAEBD7;
+            line-height: 2;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            cursor:pointer;
+            float : left;
+            margin-right:10px;
+        }
+        
+        
+        
+        .hintbutton {
+            display: inline-block;
+            border-style: solid;
+            border-color: #bbb #888 #666 #aaa;
+            border-width: 3px 4px 4px 3px;
+            width: 15em;
+            height: 2em;
+            background-color: #DAA520;
+            line-height: 2;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 900;
+            cursor:pointer;
+            float : left;
+            margin-right:10px;
+        }
+        
+        
+        
+        
+        .buttonlink:hover {
+            border-color: #666 #aaa #bbb #888;
+            border-width: 4px 3px 3px 4px;
+            color: #000;
+        }
+        
+        .visible
+        {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 2s linear;
+        }
+        
+        .hidden
+        {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s 2s, opacity 2s linear;
+        }
+        
+        
+        table {
+            border-collapse: collapse;
+            border-spacing: 10px 50px;
+            text-align: center;
+            clear: left;
+            
+        }
+        
+        th, td{
+            padding: 2px;
+            
+        }
+        
+        input {
+            width: 50px;
+            margin: 5px;
+            font-size: 15px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            /*             border: 5px ;  */
+        }
+        
+        .firstPageTable {
+            float:left;
+            margin:1em;
+            width:300px;
+            height:300px;
+            
+        }
+        
+        .colorTableHead {
+            color:#0000FF;
+        }
+        input[type="text"] {
+            width: 85%;
+            height: 100%;
+            box-sizing: border-box;
+            -webkit-box-sizing:border-box;
+            -moz-box-sizing: border-box;
+            style="background-color:#FCF5D8;">
+        }
+        .container{
+            /* width : 500px; */
+            width: 300px;
+            border: 2px solid #DAA520;
+            padding: 25px;
+            margin: 25px;
+        }
+        
+        .container2{
+            width : 700px;
+            /* border: 2px solid #DAA520; */
+            /* padding: 10px; */
+            margin-left: 5px;
+        }
+        
+        
+        
+            </style>
+    </head>
+    
+    <body>
+        
+        <!------------------------------------------------------------------------------------------------------------------------------------------------->
+        <div id="reminder" style="display:block;" class="container2">
+            
+            <h1>How well do you remember the Three Word Strategy?</h1>
+            
+            
+            <table >
+                <tr>
+                    <td align="left">
+                        
+                        <ul>
+                            <li>What were your three words?</li>
+                            </ul>
+                            
+                            <table style="width:100%">
+                                <tr>
+                                    <th><input type="text" size="20" class="form-control" name="firstWord" placeholder="word1"> </th>
+                                    
+                                    <th><input type="text" size="20" class="form-control" name="secondWord" placeholder="word2"></th>
+                                    
+                                    <th><input type="text" size="20" class="form-control" name="thirdWord" placeholder="word3"></th>
+                                </tr>
+                            </table>
+                    </td>
+                </tr>
+                
+                
+                <tr>
+                    <td align="left">
+                        <br>
+                        <ul>
+                            <li> What did you use as your wildcard? </li>
+                        </ul>
+                        
+                        <table style="width:100%">
+                            <tr>
+                                <td>
+                                    <input name="wildcard" type="text" maxlength="10" size="10" placeholder="Wildcard">
+                                        </td>
+                            </tr>
+                        </table>
+                        
+                    </td>
+                </tr>
+                
+                
+                <tr>
+                    <td align="left">
+                        <br>
+                        <ul>
+                        <li>What was the special string that you appended to the end of your passwords?</li>
+                        </ul>
+                        
+                        <table style="width:100%">
+                            <tr>
+                                <td>
+                                    <input name="specialString" type="text" maxlength="10" size="10" placeholder="Special String">
+                                        </td>
+                            </tr>
+                        </table>
+                        
+                        </td>
+                    </tr>
+                    
+                    
+                    <tr>
+                        <td align="left">
+                            <br>
+                            <ul>
+                            <li> Type the password for <i>drop.com</i> </li>
+                            </ul>
+                            
+                            <table style="width:100%">
+                                <tr>
+                                    <td>
+                                        <input name="dropPass" type="text" maxlength="10" size="10" placeholder="Password">
+                                            </td>
+                                </tr>
+                            </table>
+                            
+                            
+                            </td>
+                    </tr>
+                    </table>
+            
+            <p>&nbsp;</p>
+            
+            
+                            <table>
+                                <tr>
+                                    <td><div class="hintbutton" onclick ="showInstructions()"> Remind me of instructions </div></td>
+                                </tr>
+                            </table>
+                      
+                        
+        
+                        <p>&nbsp;</p>
+                        
+                        <div id="instructions" style="display:none" class="container">
+                            
+                            <h4>Given a website name, e.g., <font color="black">apple</font>, generate your password as follows:</h4>
+                            <ol>
+                                <li>Start at the first letter of <font color="black">apple</font>, (<font color="black"> a </font>).</li>
+                                
+                                <li>Find the first occurrence of the letter in your word sequence and output the next <b>consonant</b>.
+                                    <ul>
+                                        <li> If the letter does not appear in your word sequence, output the wildcard.</li>
+                                        <li> If the letter is the last letter in your word sequence, wrap around.</li>
+                                    </ul>
+                                </li>
+                                
+                                <li>
+                                    Repeat on the remaining letters of <font color="black">apple</font> till you reach the end,
+                                </li>
+                                
+                                <li>
+                                    Attach the special string.
+                                </li>
+                            </ol>
+                        </div>
+                        
+                        
+                        <h3>Thanks a lot for participating in this survey.</h3>
+                        <h3>  You may now submit this HIT. </h3>
+                      
+                        </div>
+        
+        <input type="hidden" name="instCounter" value="0" />
+        
+    </body>
+</html>
